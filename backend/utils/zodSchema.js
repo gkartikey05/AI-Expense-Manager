@@ -53,6 +53,13 @@ const goalSchema = z.object({
   targetDate: z.string().optional(),
 });
 
+//update goal schema
+const updateGoalSchema = z.object({
+  targetAmount: z.number().positive("Target amount is required"),
+  savedAmount: z.number().nonnegative("Saved amount is required"),
+  targetDate: z.string().optional(),
+});
+
 module.exports = {
   registerSchema,
   loginSchema,
@@ -61,4 +68,5 @@ module.exports = {
   budgetSchema,
   updatebudgetAmountSchema,
   goalSchema,
+  updateGoalSchema,
 };

@@ -13,12 +13,12 @@ const goalRouter = express.Router();
 
 goalRouter.post("/add-goal", auth, addGoal);
 
-goalRouter.put("/update-goal/:goalId", auth, updateGoal);
+goalRouter.put("/update-goal/:id", auth, updateGoal);
 
-goalRouter.delete("/delete-goal/:goalId", auth, deleteGoal);
+goalRouter.delete("/delete-goal/:id", auth, deleteGoal);
 
-goalRouter.get("/my-goals", auth, getAllGoals);
+goalRouter.get("/get-goals", auth, getAllGoals);
 
-goalRouter.patch("/add-amount/:goalId", auth, addAmountToGoal);
+goalRouter.patch("/add-amount/:id", auth, addAmountToGoal);
 
 module.exports = goalRouter;

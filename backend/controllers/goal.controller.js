@@ -1,5 +1,5 @@
 const prisma = require("../utils/prisma");
-const { goalSchema } = require("../utils/zodSchema");
+const { goalSchema, updateGoalSchema } = require("../utils/zodSchema");
 
 // -------add goal controller-----------
 const addGoal = async (req, res) => {
@@ -11,7 +11,7 @@ const addGoal = async (req, res) => {
     if (!result.success) {
       return res.status(400).json({
         success: false,
-        message: result.error.issues.map((i) => i.message).join(", "),
+        message: result.error.issues.map((i) => i.message),
       });
     }
 
@@ -55,10 +55,10 @@ const addGoal = async (req, res) => {
 // ---------update goal-------------------
 const updateGoal = async (req, res) => {
   const userId = req.userId;
-  const { goalId } = req.params;
+  const id = Number(req.params.id);
 
   try {
-    const result = goalSchema.safeParse(req.body);
+    const result = updateGoalSchema.safeParse(req.body);
 
     if (!result.success) {
       return res.status(400).json({
@@ -70,7 +70,7 @@ const updateGoal = async (req, res) => {
     // Check if the goal exists
     const existingGoal = await prisma.goal.findFirst({
       where: {
-        id: goalId,
+        id,
         userId,
       },
     });
@@ -78,16 +78,19 @@ const updateGoal = async (req, res) => {
     if (!existingGoal) {
       return res.status(404).json({
         success: false,
-        message: "Goal not found or does not belong to the user.",
+        message: "Goal not found",
       });
     }
 
+    const { targetAmount, savedAmount } = result.data;
+
     const updatedGoal = await prisma.goal.update({
       where: {
-        id: goalId,
+        id: existingGoal.id,
       },
       data: {
-        ...result.data,
+        targetAmount,
+        savedAmount,
       },
     });
 
@@ -108,13 +111,13 @@ const updateGoal = async (req, res) => {
 //   ----------delete goal----------------
 const deleteGoal = async (req, res) => {
   const userId = req.userId;
-  const { goalId } = req.params;
+  const id = Number(req.params.id);
 
   try {
     // Check if the goal exists and belongs to the user
     const existingGoal = await prisma.goal.findFirst({
       where: {
-        id: goalId,
+        id,
         userId,
       },
     });
@@ -128,7 +131,7 @@ const deleteGoal = async (req, res) => {
 
     await prisma.goal.delete({
       where: {
-        id: goalId,
+        id: existingGoal.id,
       },
     });
 
@@ -176,7 +179,7 @@ const getAllGoals = async (req, res) => {
 //--------------add ammount to goal--------------
 const addAmountToGoal = async (req, res) => {
   const userId = req.userId;
-  const { goalId } = req.params;
+  const id = Number(req.params.id);
   const { amount } = req.body;
 
   try {
@@ -191,7 +194,7 @@ const addAmountToGoal = async (req, res) => {
     // Find the goal
     const goal = await prisma.goal.findFirst({
       where: {
-        id: goalId,
+        id,
         userId,
       },
     });
@@ -205,7 +208,7 @@ const addAmountToGoal = async (req, res) => {
 
     const updatedGoal = await prisma.goal.update({
       where: {
-        id: goalId,
+        id: goal.id,
       },
       data: {
         amount: goal.amount + amount,
