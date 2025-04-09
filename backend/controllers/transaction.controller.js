@@ -1,8 +1,8 @@
 const prisma = require("../utils/prisma");
 const { transactionSchema } = require("../utils/zodSchema");
 
-// ---------------make or update transaction----------------
-const makeOrUpdateTransaction = async (req, res) => {
+// ---------------make or transaction----------------
+const makeTransaction = async (req, res) => {
   const userId = req.userId;
   try {
     const result = transactionSchema.safeParse(req.body);
@@ -14,43 +14,70 @@ const makeOrUpdateTransaction = async (req, res) => {
       });
     }
 
-    const { transactionId } = req.body;
+    const transaction = await prisma.transaction.create({
+      data: {
+        ...result.data,
+        userId,
+      },
+    });
 
-    let transaction;
-
-    if (transactionId) {
-      // Update
-      transaction = await prisma.transaction.update({
-        where: {
-          id: transactionId,
-        },
-        data: {
-          ...result.data,
-        },
-      });
-
-      return res.status(200).json({
-        success: true,
-        message: "Transaction updated",
-        transaction,
-      });
-    } else {
-      // Create
-      transaction = await prisma.transaction.create({
-        data: {
-          ...result.data,
-          userId,
-        },
-      });
-
-      return res.status(201).json({
-        success: true,
-        message: "Transaction saved",
-        transaction,
-      });
-    }
+    return res.status(201).json({
+      success: true,
+      message: "Transaction saved",
+      transaction,
+    });
   } catch (err) {
     console.log("error:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+// -------------update transaction------------------
+const updateTransaction = async (req, res) => {
+  const userId = req.userId;
+  const id = req.params.id;
+
+  try {
+    const result = transactionSchema.safeParse(req.body);
+
+    if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        message: result.error.issues.map((issue) => issue.message),
+      });
+    }
+
+    // Check if transaction exists for this user
+    const existingTransaction = await prisma.transaction.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!existingTransaction) {
+      return res.status(404).json({
+        success: false,
+        message: "Transaction not found",
+      });
+    }
+
+    // Update
+    const updatedTransaction = await prisma.transaction.update({
+      where: { id },
+      data: result.data,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Transaction updated",
+      transaction: updatedTransaction,
+    });
+  } catch (err) {
+    console.error("error:", err);
     return res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -125,7 +152,8 @@ const deleteTransaction = async (req, res) => {
 };
 
 module.exports = {
-  makeOrUpdateTransaction,
+  makeTransaction,
+  updateTransaction,
   getAllTransaction,
   deleteTransaction,
 };

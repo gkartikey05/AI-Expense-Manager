@@ -55,6 +55,7 @@ const addBudget = async (req, res) => {
 // ------------update budget--------------------
 const updateBudget = async (req, res) => {
   const userId = req.userId;
+  const id = req.params.id;
   try {
     const result = budgetSchema.safeParse(req.body);
 
@@ -70,7 +71,8 @@ const updateBudget = async (req, res) => {
     // Find the existing budget
     const existing = await prisma.budget.findFirst({
       where: {
-        AND: [{ userId }, { category }],
+        userId,
+        id,
       },
     });
 
@@ -107,13 +109,14 @@ const updateBudget = async (req, res) => {
 // -------------delete budget-------------
 const deleteBudget = async (req, res) => {
   const userId = req.userId;
-  const { id } = req.params;
+  const  id  = req.params.id;
 
   try {
     //check if the budget exists for the given user
     const existing = await prisma.budget.findFirst({
       where: {
-        AND: [{ userId }, { id }],
+        userId,
+        id,
       },
     });
 
