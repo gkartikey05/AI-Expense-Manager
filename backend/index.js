@@ -8,6 +8,7 @@ const authRouter = require("./routes/auth.routes");
 const userRouter = require("./routes/user.routes");
 const transactionRouter = require("./routes/transaction.route");
 const budgetRouter = require("./routes/budget.routes");
+const goalRouter = require("./routes/goal.routes");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -23,7 +24,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/transaction", transactionRouter);
 app.use("/api/budget", budgetRouter);
-
+app.use("/api/goal", goalRouter);
 // listen to server
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
