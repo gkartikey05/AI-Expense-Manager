@@ -1,5 +1,12 @@
 const prisma = require("../utils/prisma");
 const { transactionSchema } = require("../utils/zodSchema");
+const {
+  startOfWeek,
+  endOfWeek,
+  startOfMonth,
+  endOfMonth,
+  subMonths,
+} = require("date-fns");
 
 // ---------------make or transaction----------------
 const makeTransaction = async (req, res) => {
@@ -85,29 +92,115 @@ const updateTransaction = async (req, res) => {
   }
 };
 
-// ---------------get all transaction---------------
+// --------------get all transcation based on filters-----------------
 const getAllTransaction = async (req, res) => {
   const userId = req.userId;
+  const filter = req.query.filter;
+  const sort = req.query.sort;
+  const search = req.query.search?.toLowerCase();
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10;
+  const skip = (page - 1) * limit;
+
+  const today = new Date();
+  const filterObject = { userId };
+
+  if (filter === "income") filterObject.type = "INCOME";
+  if (filter === "expense") filterObject.type = "EXPENSE";
+
+  if (filter === "week") {
+    filterObject.date = {
+      gte: startOfWeek(today, { weekStartsOn: 1 }),
+      lte: endOfWeek(today, { weekStartsOn: 1 }),
+    };
+  }
+  if (filter === "thisMonth") {
+    filterObject.date = {
+      gte: startOfMonth(today),
+      lte: endOfMonth(today),
+    };
+  }
+  if (filter === "lastMonth") {
+    const lastMonth = subMonths(today, 1);
+    filterObject.date = {
+      gte: startOfMonth(lastMonth),
+      lte: endOfMonth(lastMonth),
+    };
+  }
+
+  if (search) {
+    filterObject.OR = [
+      {
+        description: {
+          contains: search,
+          mode: "insensitive",
+        },
+      },
+      {
+        type: {
+          contains: search,
+          mode: "insensitive",
+        },
+      },
+      {
+        category: {
+          contains: search,
+          mode: "insensitive",
+        },
+      },
+    ];
+  }
+
+  // Sorting
+  let orderBy = {};
+  switch (sort) {
+    case "dateNewest":
+      orderBy = { date: "desc" };
+      break;
+    case "dateOldest":
+      orderBy = { date: "asc" };
+      break;
+    case "amountHighToLow":
+      orderBy = { amount: "desc" };
+      break;
+    case "amountLowToHigh":
+      orderBy = { amount: "asc" };
+      break;
+    case "descriptionAZ":
+      orderBy = { description: "asc" };
+      break;
+    default:
+      orderBy = { date: "desc" };
+  }
+
   try {
     const transactions = await prisma.transaction.findMany({
-      where: {
-        userId: userId,
-      },
+      where: filterObject,
+      orderBy,
+      skip,
+      take: limit,
+    });
+
+    const total = await prisma.transaction.count({
+      where: filterObject,
     });
 
     if (!transactions.length) {
       return res.status(404).json({
         success: false,
-        message: "No transactions yet",
+        message: "No transactions found",
       });
     }
 
     return res.status(200).json({
       success: true,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalTransactions: total,
       transactions,
     });
   } catch (err) {
-    console.log("error:", err);
+    console.error("error:", err);
     return res.status(500).json({
       success: false,
       message: "Internal server error",
