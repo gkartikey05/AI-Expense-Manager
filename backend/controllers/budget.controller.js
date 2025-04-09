@@ -1,5 +1,8 @@
 const prisma = require("../utils/prisma");
-const { budgetSchema } = require("../utils/zodSchema");
+const {
+  budgetSchema,
+  updatebudgetAmountSchema,
+} = require("../utils/zodSchema");
 
 // ---------------add budget controller-----------
 const addBudget = async (req, res) => {
@@ -19,7 +22,8 @@ const addBudget = async (req, res) => {
     // check if budget category already exists
     const existing = await prisma.budget.findFirst({
       where: {
-        AND: [{ userId: userId }, { category: category }],
+        userId,
+        category,
       },
     });
 
@@ -55,9 +59,10 @@ const addBudget = async (req, res) => {
 // ------------update budget--------------------
 const updateBudget = async (req, res) => {
   const userId = req.userId;
-  const id = req.params.id;
+  const id = Number(req.params.id);
+  console.log("userId", userId, "id:", id);
   try {
-    const result = budgetSchema.safeParse(req.body);
+    const result = updatebudgetAmountSchema.safeParse(req.body);
 
     if (!result.success) {
       return res.status(400).json({
@@ -66,7 +71,7 @@ const updateBudget = async (req, res) => {
       });
     }
 
-    const { category, amount } = result.data;
+    const { amount } = result.data;
 
     // Find the existing budget
     const existing = await prisma.budget.findFirst({
@@ -88,7 +93,6 @@ const updateBudget = async (req, res) => {
       where: { id: existing.id },
       data: {
         amount,
-        category,
       },
     });
 
@@ -109,7 +113,7 @@ const updateBudget = async (req, res) => {
 // -------------delete budget-------------
 const deleteBudget = async (req, res) => {
   const userId = req.userId;
-  const  id  = req.params.id;
+  const id =Number( req.params.id);
 
   try {
     //check if the budget exists for the given user

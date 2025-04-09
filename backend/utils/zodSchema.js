@@ -40,6 +40,11 @@ const budgetSchema = z.object({
   amount: z.number().positive("Amount is required"),
 });
 
+// update budget amount schema
+const updatebudgetAmountSchema = z.object({
+  amount: z.number().positive("Amount is required"),
+});
+
 //goal schema
 const goalSchema = z.object({
   goalName: z.string().nonempty("Goal name is required"),
@@ -54,5 +59,6 @@ module.exports = {
   userSchema,
   transactionSchema,
   budgetSchema,
+  updatebudgetAmountSchema,
   goalSchema,
 };
