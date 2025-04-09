@@ -1,0 +1,89 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id          String  @id @default(uuid())
+  fullName    String
+  email       String  @unique
+  password    String
+  phoneNumber String? @unique
+  profile     String?
+
+  transactions Transaction[]
+  budgets      Budget[]
+  goals        Goal[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id          String          @id @default(uuid())
+  description String
+  category    Category
+  date        DateTime        @default(now())
+  amount      Decimal
+  type        TransactionType
+  userId      String
+  user        User            @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Budget {
+  id       Int      @id @default(autoincrement())
+  category Category
+  amount   Decimal
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, category])
+  @@index([userId])
+}
+
+model Goal {
+  id           Int       @id @default(autoincrement())
+  goalName     String
+  targetAmount Decimal
+  savedAmount  Decimal
+  targetDate   DateTime?
+  userId       String
+  user         User      @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, goalName])
+  @@index([userId])
+}
+
+enum Category {
+  FOOD
+  HOUSING
+  TRANSPORTATION
+  UTILITIES
+  SHOPPING
+  ENTERTAINMENT
+  HEALTHCARE
+  EDUCATION
+  PERSONAL
+  DEBT
+  OTHER
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
