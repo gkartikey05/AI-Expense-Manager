@@ -27,7 +27,7 @@ model Transaction {
   id          String          @id @default(uuid())
   description String
   category    Category
-  date        DateTime        @default(now())
+  date        String        
   amount      Decimal
   type        TransactionType
   userId      String
@@ -58,7 +58,7 @@ model Goal {
   goalName     String
   targetAmount Decimal
   savedAmount  Decimal
-  targetDate   DateTime?
+  targetDate   String?
   userId       String
   user         User      @relation(fields: [userId], references: [id])
 
