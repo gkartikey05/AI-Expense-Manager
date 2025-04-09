@@ -23,7 +23,6 @@ const userSchema = z.object({
     .length(10, "Phone number must be 10 digits")
     .regex(/^\d+$/, "Phone number must contain only digits")
     .optional(),
-  profile: z.string().trim().optional(),
 });
 
 module.exports = {
