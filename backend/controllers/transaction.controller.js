@@ -1,12 +1,6 @@
 const prisma = require("../utils/prisma");
 const { transactionSchema } = require("../utils/zodSchema");
-const {
-  startOfWeek,
-  endOfWeek,
-  startOfMonth,
-  endOfMonth,
-  subMonths,
-} = require("date-fns");
+
 
 // ---------------make or transaction----------------
 const makeTransaction = async (req, res) => {
@@ -103,31 +97,65 @@ const getAllTransaction = async (req, res) => {
   const skip = (page - 1) * limit;
 
   const today = new Date();
-  const filterObject = { userId };
+  const filterObject = {
+    userId,
+  };
 
+  // Filter by type
   if (filter === "income") filterObject.type = "INCOME";
   if (filter === "expense") filterObject.type = "EXPENSE";
 
+  // Date Filters
   if (filter === "week") {
+    const day = today.getDay();
+    const diffToMonday = day === 0 ? 6 : day - 1;
+
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - diffToMonday);
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+
     filterObject.date = {
-      gte: startOfWeek(today, { weekStartsOn: 1 }),
-      lte: endOfWeek(today, { weekStartsOn: 1 }),
-    };
-  }
-  if (filter === "thisMonth") {
-    filterObject.date = {
-      gte: startOfMonth(today),
-      lte: endOfMonth(today),
-    };
-  }
-  if (filter === "lastMonth") {
-    const lastMonth = subMonths(today, 1);
-    filterObject.date = {
-      gte: startOfMonth(lastMonth),
-      lte: endOfMonth(lastMonth),
+      gte: startOfWeek,
+      lte: endOfWeek,
     };
   }
 
+  if (filter === "thisMonth") {
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    endOfMonth.setHours(23, 59, 59, 999);
+
+    filterObject.date = {
+      gte: startOfMonth,
+      lte: endOfMonth,
+    };
+  }
+
+  if (filter === "lastMonth") {
+    const lastMonth =
+      today.getMonth() === 0
+        ? new Date(today.getFullYear() - 1, 11, 1)
+        : new Date(today.getFullYear(), today.getMonth() - 1, 1);
+
+    const startOfLastMonth = new Date(lastMonth);
+    const endOfLastMonth = new Date(
+      lastMonth.getFullYear(),
+      lastMonth.getMonth() + 1,
+      0
+    );
+    endOfLastMonth.setHours(23, 59, 59, 999);
+
+    filterObject.date = {
+      gte: startOfLastMonth,
+      lte: endOfLastMonth,
+    };
+  }
+
+  // Text Search
   if (search) {
     filterObject.OR = [
       {
