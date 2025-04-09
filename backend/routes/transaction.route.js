@@ -10,8 +10,10 @@ const {
 const transactionRouter = express.Router();
 
 transactionRouter.route("/make-transaction").post(auth, makeTransaction);
-transactionRouter.route("/update-transaction").put(auth, updateTransaction);
+transactionRouter.route("/update-transaction/:id").put(auth, updateTransaction);
 transactionRouter.route("/get-transactions").get(auth, getAllTransaction);
-transactionRouter.route("/:id").delete(auth, deleteTransaction);
+transactionRouter
+  .route("/delete-transaction/:id")
+  .delete(auth, deleteTransaction);
 
 module.exports = transactionRouter;

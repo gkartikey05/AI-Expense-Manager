@@ -25,20 +25,18 @@ const userSchema = z.object({
     .optional(),
 });
 
-// transaction schema
+// transaction type
 const transactionSchema = z.object({
-  description: z.string().nonempty("Description is required"),
-  category: z.string().nonempty("Category is required"),
+  description: z.string().trim().nonempty("Description is required"),
+  category: z.string().trim().toUpperCase().nonempty("Category is required"),
   amount: z.number().positive("Amount must be a positive number").min(1),
-  type: z.enum(["INCOME", "EXPENSE"], {
-    required_error: "Transaction type is required",
-  }),
-  date: z.string().nonempty("Date is required"),
+  type: z.string().toUpperCase().nonempty("Type is required"),
+  date: z.string().trim().nonempty("Date is required"),
 });
 
 // budget schema
 const budgetSchema = z.object({
-  category: z.string().nonempty("Category is required"),
+  category: z.string().toUpperCase().nonempty("Category is required"),
   amount: z.number().positive("Amount is required"),
 });
 

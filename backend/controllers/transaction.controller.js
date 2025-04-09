@@ -1,8 +1,7 @@
 const prisma = require("../utils/prisma");
 const { transactionSchema } = require("../utils/zodSchema");
 
-
-// ---------------make or transaction----------------
+// ---------------make  transaction----------------
 const makeTransaction = async (req, res) => {
   const userId = req.userId;
   try {
@@ -40,6 +39,8 @@ const makeTransaction = async (req, res) => {
 const updateTransaction = async (req, res) => {
   const userId = req.userId;
   const id = req.params.id;
+
+  console.log("id:", id);
 
   try {
     const result = transactionSchema.safeParse(req.body);
@@ -155,28 +156,12 @@ const getAllTransaction = async (req, res) => {
     };
   }
 
-  // Text Search
+  // search by description
   if (search) {
-    filterObject.OR = [
-      {
-        description: {
-          contains: search,
-          mode: "insensitive",
-        },
-      },
-      {
-        type: {
-          contains: search,
-          mode: "insensitive",
-        },
-      },
-      {
-        category: {
-          contains: search,
-          mode: "insensitive",
-        },
-      },
-    ];
+    filterObject.description = {
+      contains: search,
+      mode: "insensitive",
+    };
   }
 
   // Sorting
