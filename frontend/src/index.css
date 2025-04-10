@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -113,8 +114,23 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    font-family: "Outfit", sans-serif;
   }
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer components {
+  .container {
+    @apply px-4 md:px-6 lg:px-10;
+  }
+}
+
+.dotted-bg {
+  background-image: radial-gradient(
+    #9ca3af1c 1.2px,
+    transparent 1.2px
+  ); /* Tailwind gray-400 */
+  background-size: 12px 12px;
 }
