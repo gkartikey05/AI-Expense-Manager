@@ -1,4 +1,4 @@
-import { DollarSign } from "lucide-react";
+import { DollarSign, LayoutDashboard } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -19,9 +19,14 @@ const Navbar = ({ isAuth = false }: { isAuth: boolean }) => {
         </Link>
         {/* buttons */}
         {isAuth ? (
-          <Button onClick={() => navigate("/")} className="cursor-pointer">Go back to Home</Button>
+          <Button onClick={() => navigate("/")} className="cursor-pointer">
+            Go back to Home
+          </Button>
         ) : (
           <div className="flex items-center gap-4">
+            <Link to="dashboard">
+              <LayoutDashboard />
+            </Link>
             <Button
               onClick={() => navigate("/login")}
               variant="outline"
