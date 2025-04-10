@@ -1,6 +1,5 @@
 import { MoveRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { parseDomainOfCategoryAxis } from "recharts/types/util/ChartUtils";
 import { Progress } from "../ui/progress";
 
 const budgets = [
