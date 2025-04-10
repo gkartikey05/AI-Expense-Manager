@@ -20,7 +20,7 @@ const Dashboard = () => {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 h-full">
+      <main className="flex-1 h-full overflow-y-scroll">
         <Outlet />
       </main>
     </section>
