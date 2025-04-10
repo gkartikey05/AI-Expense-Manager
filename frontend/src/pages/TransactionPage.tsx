@@ -79,20 +79,23 @@ const TransactionPage = () => {
 
         {/* transactions */}
         <div className="border border-black/20 rounded-md p-4">
+        
           {/* search ,sort ,filter */}
-          <div className="flex flex-col md:flex-row items-start justify-between gap-5">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-5">
             {/* search */}
-            <div className="relative flex-1">
-              <Search className="size-5 text-gray-500 absolute top-1/2 -translate-y-1/2 ml-2" />
+            <div className="relative w-full md:max-w-md">
+              <Search className="size-5 text-gray-500 absolute top-1/2 -translate-y-1/2 left-3" />
               <Input
                 placeholder="Search transactions by description"
-                className="pl-8 shadow-none"
+                className="pl-10 shadow-none w-full"
               />
             </div>
-            <div className="flex flex-col md:flex-row items-center gap-5">
+
+            {/* filter & sort */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 w-full md:w-auto">
               {/* filter */}
               <Select>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px]">
                   <SelectValue placeholder="Filter" />
                 </SelectTrigger>
                 <SelectContent>
@@ -104,9 +107,10 @@ const TransactionPage = () => {
                   <SelectItem value="lastMonth">Last Month</SelectItem>
                 </SelectContent>
               </Select>
+
               {/* sort */}
               <Select>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px]">
                   <SelectValue placeholder="Sort" />
                 </SelectTrigger>
                 <SelectContent>

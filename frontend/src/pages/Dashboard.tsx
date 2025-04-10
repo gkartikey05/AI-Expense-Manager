@@ -1,22 +1,19 @@
 import Sidebar from "@/components/Sidebar";
-import { useState } from "react";
+import { useDashboardToggle } from "@/contexts/DashboardToggleContext";
 import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+  const { isSidebarOpen } = useDashboardToggle();
 
   return (
     <section className="relative flex items-start h-screen">
       {/* Sidebar */}
       <aside
         className={`${
-          isSidebarOpen ? "w-[250px]" : "w-[50px]"
-        } h-full border-r border-r-black/20 transition-[width] duration-300 ease-in-out`}
+          isSidebarOpen ? "w-[250px]" : "w-0 md:w-[50px]"
+        } h-full border-r border-r-black/20 transition-[width] duration-300 ease-in-out overflow-hidden`}
       >
-        <Sidebar
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
+        <Sidebar />
       </aside>
 
       {/* Main content */}

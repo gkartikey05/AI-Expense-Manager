@@ -1,5 +1,4 @@
 import {
-  AlignJustify,
   DollarSign,
   LayoutDashboard,
   LineChart,
@@ -9,8 +8,9 @@ import {
   Settings,
   User,
 } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
 import { NavLink } from "react-router-dom";
+import SidebarToggleButton from "./SidebarToggleButton";
+import { useDashboardToggle } from "@/contexts/DashboardToggleContext";
 
 const navItems = [
   {
@@ -40,12 +40,9 @@ const navItems = [
   },
 ];
 
-type SidebarType = {
-  isSidebarOpen: boolean;
-  setIsSidebarOpen: Dispatch<SetStateAction<boolean>>;
-};
+const Sidebar = () => {
+  const { isSidebarOpen, setIsSidebarOpen } = useDashboardToggle();
 
-const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarType) => {
   return (
     <div className="relative h-full">
       {/* Logo + Toggle */}
@@ -63,10 +60,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarType) => {
         )}
 
         {/* Toggle button */}
-        <AlignJustify
-          onClick={() => setIsSidebarOpen((prev) => !prev)}
-          className="w-5 h-5 text-neutral-800 cursor-pointer"
-        />
+        <SidebarToggleButton />
       </div>
 
       {/* navlinks */}
@@ -75,6 +69,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarType) => {
           <NavLink
             to={item.href}
             key={item.title}
+            onClick={() => setIsSidebarOpen(false)}
             className={({ isActive }) =>
               `flex items-center gap-5 p-2 text-neutral-800 hover:bg-neutral-200 transition-all ${
                 isActive
