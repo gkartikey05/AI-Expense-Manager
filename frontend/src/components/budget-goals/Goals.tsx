@@ -10,6 +10,7 @@ import {
 import { Progress } from "../ui/progress";
 import { useState } from "react";
 import GoalForm from "../goal/GoalForm";
+import AddMoneyForm from "../goal/AddMoneyForm";
 
 const goals = [
   {
@@ -46,6 +47,7 @@ const goals = [
 
 const Goals = () => {
   const [openGoalForm, setOpenGoalForm] = useState(false);
+  const [openAddMoneyForm, setOpenAddMoneyForm] = useState(false);
 
   // calculate goal % saved
   const goalSaved = (amount: number, saved: number): number => {
@@ -123,7 +125,10 @@ const Goals = () => {
 
               {/* Add Money Button */}
               <CardFooter>
-                <Button className="w-full cursor-pointer">
+                <Button
+                  onClick={() => setOpenAddMoneyForm(true)}
+                  className="w-full cursor-pointer"
+                >
                   Add Money to Goal
                 </Button>
               </CardFooter>
@@ -132,6 +137,7 @@ const Goals = () => {
         </div>
       </div>
       {openGoalForm && <GoalForm closeForm={setOpenGoalForm} />}
+      {openAddMoneyForm && <AddMoneyForm closeForm={setOpenAddMoneyForm} />}
     </>
   );
 };
