@@ -16,10 +16,21 @@ const BudgetPage = () => {
 
         {/* tabs */}
         <Tabs defaultValue="budget" className="w-full">
-          <TabsList>
-            <TabsTrigger value="budget">Budget</TabsTrigger>
-            <TabsTrigger value="goals">Saving Goals</TabsTrigger>
+          <TabsList className="flex gap-2 bg-gray-100  rounded-sm">
+            <TabsTrigger
+              value="budget"
+              className="data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:text-black px-4 py-2 rounded-md text-gray-600"
+            >
+              Budget
+            </TabsTrigger>
+            <TabsTrigger
+              value="goals"
+              className="data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:text-black px-4 py-2 rounded-md text-gray-600"
+            >
+              Saving Goals
+            </TabsTrigger>
           </TabsList>
+
           <TabsContent value="budget">
             <Budget />
           </TabsContent>

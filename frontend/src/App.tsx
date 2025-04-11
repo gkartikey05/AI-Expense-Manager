@@ -8,16 +8,18 @@ import TransactionPage from "./pages/TransactionPage";
 import BudgetPage from "./pages/BudgetPage";
 import InsightPage from "./pages/InsightPage";
 import SettingPage from "./pages/SettingPage";
+import NotFound from "./pages/Notfound";
 
 const App = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="*" element={<NotFound />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route  element={<Dashboard />}>
-          <Route path="dashboard" element={<DashboardPage />} /> 
+        <Route element={<Dashboard />}>
+          <Route path="dashboard" element={<DashboardPage />} />
           <Route path="transactions" element={<TransactionPage />} />
           <Route path="budgets" element={<BudgetPage />} />
           <Route path="insights" element={<InsightPage />} />
