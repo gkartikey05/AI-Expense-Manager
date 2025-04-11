@@ -8,6 +8,8 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Progress } from "../ui/progress";
+import { useState } from "react";
+import GoalForm from "../goal/GoalForm";
 
 const goals = [
   {
@@ -43,75 +45,94 @@ const goals = [
 ];
 
 const Goals = () => {
+  const [openGoalForm, setOpenGoalForm] = useState(false);
+
   // calculate goal % saved
   const goalSaved = (amount: number, saved: number): number => {
     return (saved / amount) * 100;
   };
 
   return (
-    <div className="mt-5">
-      {/* add goal */}
-      <Button className="cursor-pointer">
-        Add Goal <Plus />
-      </Button>
+    <>
+      <div className="mt-5">
+        {/* add goal */}
+        <Button
+          onClick={() => setOpenGoalForm(true)}
+          className="cursor-pointer"
+        >
+          Add Goal <Plus />
+        </Button>
 
-      {/* goals List */}
-      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        {goals.map((goal) => (
-          <Card key={goal.goalName}>
-            {/* Card Header with Goal Name and Edit Button */}
-            <CardHeader className="flex items-center justify-between">
-              <CardTitle className="text-xl font-medium">{goal.goalName}</CardTitle>
-              <button className="p-2 rounded-full hover:bg-gray-200 cursor-pointer">
-                <Pencil className="size-4"/>
-              </button>
-            </CardHeader>
+        {/* goals List */}
+        <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {goals.map((goal) => (
+            <Card key={goal.goalName}>
+              {/* Card Header with Goal Name and Edit Button */}
+              <CardHeader className="flex items-center justify-between">
+                <CardTitle className="text-xl font-medium">
+                  {goal.goalName}
+                </CardTitle>
+                <button className="p-2 rounded-full hover:bg-gray-200 cursor-pointer">
+                  <Pencil className="size-4" />
+                </button>
+              </CardHeader>
 
-            <CardContent>
-              {/* Target Amount */}
-              <p className="text-gray-500 mb-5">Target: Rs {goal.targetAmount}</p>
-
-              {/* Progress Section */}
-              <div>
-                <p className="flex items-center justify-between text-gray-800 text-sm">
-                  <span>Progress</span>{" "}
-                  <span>
-                    {goalSaved(goal.targetAmount, goal.savedAmount).toFixed(0)}%
-                  </span>
+              <CardContent>
+                {/* Target Amount */}
+                <p className="text-gray-500 mb-5">
+                  Target: Rs {goal.targetAmount}
                 </p>
 
-                {/* Visual Progress Bar */}
-                <Progress
-                  value={Number(
-                    goalSaved(goal.targetAmount, goal.savedAmount).toFixed(0)
-                  )}
-                />
-              </div>
-
-              {/* Saved and Remaining Amounts */}
-              <div className="mt-5 flex items-center justify-between">
+                {/* Progress Section */}
                 <div>
-                  <p className="text-gray-500">Saved</p>
-                  <p className="font-semibold">Rs {goal.savedAmount}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500">Remaining</p>
-                  <p className="font-semibold">Rs {goal.targetAmount - goal.savedAmount}</p>
-                </div>
-              </div>
+                  <p className="flex items-center justify-between text-gray-800 text-sm">
+                    <span>Progress</span>{" "}
+                    <span>
+                      {goalSaved(goal.targetAmount, goal.savedAmount).toFixed(
+                        0
+                      )}
+                      %
+                    </span>
+                  </p>
 
-              {/* Target Date */}
-              <p className="mt-5">Target date: {goal.targetDate}</p>
-            </CardContent>
+                  {/* Visual Progress Bar */}
+                  <Progress
+                    value={Number(
+                      goalSaved(goal.targetAmount, goal.savedAmount).toFixed(0)
+                    )}
+                  />
+                </div>
 
-            {/* Add Money Button */}
-            <CardFooter>
-              <Button className="w-full cursor-pointer">Add Money to Goal</Button>
-            </CardFooter>
-          </Card>
-        ))}
+                {/* Saved and Remaining Amounts */}
+                <div className="mt-5 flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-500">Saved</p>
+                    <p className="font-semibold">Rs {goal.savedAmount}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">Remaining</p>
+                    <p className="font-semibold">
+                      Rs {goal.targetAmount - goal.savedAmount}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Target Date */}
+                <p className="mt-5">Target date: {goal.targetDate}</p>
+              </CardContent>
+
+              {/* Add Money Button */}
+              <CardFooter>
+                <Button className="w-full cursor-pointer">
+                  Add Money to Goal
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
       </div>
-    </div>
+      {openGoalForm && <GoalForm closeForm={setOpenGoalForm} />}
+    </>
   );
 };
 

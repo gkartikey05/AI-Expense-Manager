@@ -67,7 +67,7 @@ const BudgetForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
   };
 
   return (
-    <div className="absolute z-50 inset-0 min-h-screen overflow-hidden bg-black/70 flex items-center justify-center px-4">
+    <div className="absolute z-50 inset-0 min-h-screen overflow-hidden bg-black/80 flex items-center justify-center px-4">
       <Card className="w-full max-w-lg bg-white relative">
         {/* form close button */}
         <button
