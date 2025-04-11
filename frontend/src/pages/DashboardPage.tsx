@@ -7,7 +7,7 @@ import RecentTransactions from "@/components/dashboardPage/RecentTransactions";
 const DashboardPage = () => {
   return (
     <>
-      <DashboardHeader />
+      <DashboardHeader title="Dashboard" />
       <section className="px-4 md:px-6 lg:px-10 py-5 space-y-5">
         {/* overall details */}
         <Overview />

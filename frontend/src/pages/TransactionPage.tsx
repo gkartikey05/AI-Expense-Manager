@@ -68,7 +68,7 @@ const mockTransactions = [
 const TransactionPage = () => {
   return (
     <>
-      <DashboardHeader />
+      <DashboardHeader title="Transaction" />
       <section className="px-4 md:px-6 lg:px-10 py-5 space-y-5">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl">Transactions</h1>
@@ -92,10 +92,10 @@ const TransactionPage = () => {
             </div>
 
             {/* filter & sort */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 w-full md:w-auto">
+            <div className="flex flex-row items-center gap-4 w-full md:w-auto">
               {/* filter */}
               <Select>
-                <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectTrigger className="flex-1 w-[180px]">
                   <SelectValue placeholder="Filter" />
                 </SelectTrigger>
                 <SelectContent>
@@ -110,7 +110,7 @@ const TransactionPage = () => {
 
               {/* sort */}
               <Select>
-                <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectTrigger className="flex-1 w-[180px]">
                   <SelectValue placeholder="Sort" />
                 </SelectTrigger>
                 <SelectContent>

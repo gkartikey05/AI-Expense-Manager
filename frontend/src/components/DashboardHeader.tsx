@@ -1,9 +1,8 @@
-import { useLocation } from "react-router-dom";
 import SidebarToggleButton from "./SidebarToggleButton";
 import { useDashboardToggle } from "@/contexts/DashboardToggleContext";
 
-const DashboardHeader = () => {
-  const { pathname } = useLocation();
+const DashboardHeader = ({ title }: { title: string }) => {
+
 
   const { isSidebarOpen } = useDashboardToggle();
 
@@ -16,7 +15,7 @@ const DashboardHeader = () => {
           <SidebarToggleButton />
         </div>
       )}
-      {pathname.replace("/", "")}
+      {title}
     </div>
   );
 };
