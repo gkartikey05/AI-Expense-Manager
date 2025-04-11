@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 export default function ProfilePictureUploader() {
   const [image, setImage] = useState<string | null>(null);
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e: React.FormEvent<HTMLFormElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
