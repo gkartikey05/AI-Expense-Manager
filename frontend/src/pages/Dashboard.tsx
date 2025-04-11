@@ -17,8 +17,8 @@ const Dashboard = () => {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 h-full overflow-y-scroll">
-        <Outlet />
+      <main className="flex-1 h-full overflow-y-scroll hide-scrollbar">
+        <Outlet /> 
       </main>
     </section>
   );

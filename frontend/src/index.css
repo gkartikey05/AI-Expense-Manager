@@ -127,6 +127,16 @@
   }
 }
 
+/* styles.css or global.css */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 .dotted-bg {
   background-image: radial-gradient(
     #9ca3af1c 1.2px,
