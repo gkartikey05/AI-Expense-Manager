@@ -1,4 +1,5 @@
 import DashboardHeader from "@/components/DashboardHeader";
+import TransactionForm from "@/components/transaction/TransactionForm";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -33,6 +34,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Plus, Search, SquarePen, Trash } from "lucide-react";
+import { useState } from "react";
 
 const mockTransactions = [
   {
@@ -66,20 +68,25 @@ const mockTransactions = [
 ];
 
 const TransactionPage = () => {
+  const [openTransactionForm, setOpenTransactionForm] = useState(false);
+
   return (
     <>
       <DashboardHeader title="Transaction" />
       <section className="px-4 md:px-6 lg:px-10 py-5 space-y-5">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl">Transactions</h1>
-          <Button className="cursor-pointer">
+          {/* button to open transaction form */}
+          <Button
+            onClick={() => setOpenTransactionForm(true)}
+            className="cursor-pointer"
+          >
             Add Transaction <Plus />
           </Button>
         </div>
 
         {/* transactions */}
         <div className="border border-black/20 rounded-md p-4">
-        
           {/* search ,sort ,filter */}
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-5">
             {/* search */}
@@ -225,6 +232,9 @@ const TransactionPage = () => {
           </Card>
         </div>
       </section>
+
+      {/* transactiomn form */}
+      {openTransactionForm && <TransactionForm closeForm={setOpenTransactionForm}/>}
     </>
   );
 };
