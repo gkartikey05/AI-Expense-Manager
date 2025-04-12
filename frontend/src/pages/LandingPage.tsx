@@ -20,17 +20,17 @@ const LandingPage = () => {
             <span className="text-gray-800 font-bold">AI analysis</span> and
             suggestions.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-5">
+          <div className=" max-w-xs mx-auto flex  justify-center gap-4 sm:gap-5">
             <Button
               onClick={() => navigate("/signup")}
-              className="px-10 py-2 text-base cursor-pointer"
+              className="px-10 py-2 text-base cursor-pointer flex-1"
             >
               Get Started
             </Button>
             <Button
               variant="secondary"
               onClick={() => navigate("/login")}
-              className="px-10 py-2 text-base cursor-pointer"
+              className="px-10 py-2 text-base cursor-pointer flex-1"
             >
               Login
             </Button>
