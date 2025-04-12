@@ -25,6 +25,8 @@ app.use("/api/user", userRouter);
 app.use("/api/transaction", transactionRouter);
 app.use("/api/budget", budgetRouter);
 app.use("/api/goal", goalRouter);
+
+
 // listen to server
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);

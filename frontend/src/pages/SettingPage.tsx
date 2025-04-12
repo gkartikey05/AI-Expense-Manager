@@ -1,4 +1,5 @@
 import DashboardHeader from "@/components/DashboardHeader";
+import HelpAndSupport from "@/components/settings/Help&Support";
 import Profile from "@/components/settings/Profile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HelpCircle, User } from "lucide-react";
@@ -35,7 +36,7 @@ const SettingPage = () => {
             <Profile />
           </TabsContent>
           <TabsContent value="help & support">
-            Lorem ipsum dolor sit amet.
+            <HelpAndSupport />
           </TabsContent>
         </Tabs>
       </section>
