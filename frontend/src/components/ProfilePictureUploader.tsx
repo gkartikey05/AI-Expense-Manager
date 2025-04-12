@@ -8,9 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { updateUserData } from "@/api/userApi";
 import toast from "react-hot-toast";
 
-type FormData = {
-  profile?: File;
-};
+
 
 const ProfilePictureUploader = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -29,7 +27,7 @@ const ProfilePictureUploader = () => {
   };
 
   const mutation = useMutation({
-    mutationFn: (data: FormData) => updateUserData(data),
+    mutationFn: (data: any) => updateUserData(data),
     onSuccess: (data: any) => {
       setUser(data.user);
       toast.success(data.message);

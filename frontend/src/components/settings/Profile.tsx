@@ -57,6 +57,7 @@ const Profile = () => {
         phoneNumber: data.user.phoneNumber,
       });
     },
+  
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || "Update failed");
     },
