@@ -8,9 +8,12 @@ import {
   Settings,
   User,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import SidebarToggleButton from "./SidebarToggleButton";
 import { useDashboardToggle } from "@/contexts/DashboardToggleContext";
+import { useUserStore } from "@/store/userStore";
+import { logoutUser } from "@/api/userAuth";
+import toast from "react-hot-toast";
 
 const navItems = [
   {
@@ -42,6 +45,23 @@ const navItems = [
 
 const Sidebar = () => {
   const { isSidebarOpen, setIsSidebarOpen } = useDashboardToggle();
+
+  const user = useUserStore((state) => state.user);
+  const clearUser = useUserStore((state) => state.clearUser);
+  const navigate = useNavigate();
+
+  const logout = async () => {
+    try {
+      const res = await logoutUser();
+      if (res.success) {
+        clearUser();
+        navigate("/");
+        toast.success(res.message);
+      }
+    } catch (err) {
+      console.log("error in logout:", err);
+    }
+  };
 
   return (
     <div className="relative h-full">
@@ -97,16 +117,17 @@ const Sidebar = () => {
         {isSidebarOpen && (
           <div className="flex-1">
             <p className="text-sm font-medium leading-none text-black">
-              Sandeep Singh
+              {user?.fullName}
             </p>
-            <p className="text-xs text-neutral-500 truncate">
-              snayal50@gmail.com
-            </p>
+            <p className="text-xs text-neutral-500 truncate">{user?.email}</p>
           </div>
         )}
 
         {/* Logout Button/Icon */}
-        <button className="p-2 hover:bg-neutral-200 rounded-full transition cursor-pointer">
+        <button
+          onClick={logout}
+          className="p-2 hover:bg-neutral-200 rounded-full transition cursor-pointer"
+        >
           <LogOut className="w-5 h-5 text-neutral-900" />
         </button>
       </div>

@@ -26,12 +26,12 @@ model User {
 model Transaction {
   id          String          @id @default(uuid())
   description String
-  category    Category
-  date        String        
+  category    String
+  date        String
   amount      Decimal
   type        TransactionType
   userId      String
-  user        User            @relation(fields: [userId], references: [id])
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -40,11 +40,11 @@ model Transaction {
 }
 
 model Budget {
-  id       Int      @id @default(autoincrement())
-  category Category
+  id       Int     @id @default(autoincrement())
+  category String
   amount   Decimal
   userId   String
-  user     User     @relation(fields: [userId], references: [id])
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -54,33 +54,19 @@ model Budget {
 }
 
 model Goal {
-  id           Int       @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   goalName     String
   targetAmount Decimal
   savedAmount  Decimal
   targetDate   String?
   userId       String
-  user         User      @relation(fields: [userId], references: [id])
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([userId, goalName])
   @@index([userId])
-}
-
-enum Category {
-  FOOD
-  HOUSING
-  TRANSPORTATION
-  UTILITIES
-  SHOPPING
-  ENTERTAINMENT
-  HEALTHCARE
-  EDUCATION
-  PERSONAL
-  DEBT
-  OTHER
 }
 
 enum TransactionType {

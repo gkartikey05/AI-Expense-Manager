@@ -14,7 +14,14 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 // Global middlewares
-app.use(cors());
+
+// cors options
+const options = {
+  origin: "http://localhost:5173",
+  credentials: true,
+};
+
+app.use(cors(options));
 app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
@@ -25,7 +32,6 @@ app.use("/api/user", userRouter);
 app.use("/api/transaction", transactionRouter);
 app.use("/api/budget", budgetRouter);
 app.use("/api/goal", goalRouter);
-
 
 // listen to server
 app.listen(PORT, () => {

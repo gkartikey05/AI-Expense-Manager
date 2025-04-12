@@ -14,8 +14,12 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Eye, EyeOff, Loader } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { registerUser } from "@/api/userAuth";
+import { useUserStore } from "@/store/userStore";
+import toast from "react-hot-toast";
 
 // zod schema
 const signupSchema = z.object({
@@ -29,6 +33,9 @@ type FormData = z.infer<typeof signupSchema>;
 const SignupPage = () => {
   const [togglePassword, setTogglePassword] = useState(false);
 
+  const setUser = useUserStore((state) => state.setUser);
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -37,8 +44,22 @@ const SignupPage = () => {
     resolver: zodResolver(signupSchema),
   });
 
+  //mutation query
+  const mutation = useMutation({
+    mutationFn: (data: FormData) => registerUser(data),
+    onSuccess: (data) => {
+      setUser(data.user);
+      toast.success(data.message);
+      navigate("/dashboard");
+    },
+    onError: (error) => {
+      toast.error(error.message || "Registration failed");
+    },
+  });
+
   const onSubmit = (data: FormData) => {
     console.log("form data:", data);
+    mutation.mutate(data);   // to pass data to mutationFn
   };
 
   return (
@@ -118,8 +139,16 @@ const SignupPage = () => {
                 )}
               </div>
 
-              <Button type="submit" className="w-full cursor-pointer">
-                Register Your Account
+              <Button
+                type="submit"
+                disabled={mutation.isPending}
+                className="w-full cursor-pointer"
+              >
+                {mutation.isPending ? (
+                  <Loader size={4} className="animate-spin" />
+                ) : (
+                  "Register Your Account"
+                )}
               </Button>
             </form>
           </CardContent>
