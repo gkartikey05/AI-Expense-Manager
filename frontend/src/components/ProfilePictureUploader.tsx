@@ -1,51 +1,114 @@
-import { useState } from "react";
-import { User } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { useUserStore } from "@/store/userStore";
+import { Loader, User } from "lucide-react";
+import { Button } from "./ui/button";
+import { useMutation } from "@tanstack/react-query";
+import { updateUserData } from "@/api/userApi";
+import toast from "react-hot-toast";
 
-export default function ProfilePictureUploader() {
-  const [image, setImage] = useState<string | null>(null);
+type FormData = {
+  profile?: File;
+};
 
+const ProfilePictureUploader = () => {
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
+
+  // Handle image selection
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      const imageUrl = URL.createObjectURL(selectedFile);
+      setImagePreview(imageUrl);
+      setFile(selectedFile);
     }
+  };
+
+  const mutation = useMutation({
+    mutationFn: (data: FormData) => updateUserData(data),
+    onSuccess: (data: any) => {
+      setUser(data.user);
+      toast.success(data.message);
+      setFile(null);
+      setImagePreview(null);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Upload failed");
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file) return;
+
+    const formData= new FormData();
+    formData.append("profile", file);
+    mutation.mutate(formData);
   };
 
   return (
     <div className="flex flex-col items-center gap-4">
-      {/* Image Preview or Placeholder */}
-      <Label htmlFor="profile-image" className="cursor-pointer">
-        {image ? (
-          <img
-            src={image}
-            alt="Profile Preview"
-            className="w-24 h-24 rounded-full object-cover border "
-          />
-        ) : (
-          <div className="w-24 h-24 rounded-full flex items-center justify-center border bg-gray-100">
-            <User className="w-10 h-10" />
-          </div>
-        )}
-      </Label>
-
-      {/* Hidden Input */}
-      <Input
-        id="profile-image"
-        type="file"
-        accept="image/*"
-        onChange={handleImageChange}
-        className="hidden"
-      />
-
-      <Button asChild>
-        <Label htmlFor="profile-image" className="cursor-pointer">
-          Change Picture
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col items-center gap-4"
+      >
+        <Label
+          htmlFor="profile-image"
+          className="size-24 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer"
+        >
+          {imagePreview ? (
+            <img
+              src={imagePreview}
+              alt="Image preview"
+              className="size-full object-cover rounded-full opacity-70"
+            />
+          ) : user?.profile ? (
+            <img
+              src={user.profile}
+              alt="User profile"
+              className="size-full object-cover rounded-full"
+            />
+          ) : (
+            <User className="size-14 text-gray-500" />
+          )}
         </Label>
-      </Button>
+
+        <Input
+          id="profile-image"
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="hidden"
+        />
+
+        {file && (
+          <Button
+            type="submit"
+            disabled={mutation.isPending}
+            className="cursor-pointer"
+          >
+            {mutation.isPending ? (
+              <Loader className="size-4 animate-spin" />
+            ) : (
+              "Save"
+            )}
+          </Button>
+        )}
+      </form>
+
+      {!file && (
+        <Button type="button" asChild>
+          <Label htmlFor="profile-image" className="cursor-pointer">
+            Choose Picture
+          </Label>
+        </Button>
+      )}
     </div>
   );
-}
+};
+
+export default ProfilePictureUploader;

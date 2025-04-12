@@ -1,6 +1,5 @@
 import axiosInstance from "./axiosInstance";
 
-
 // get user data
 export const getUserData = async () => {
   try {
@@ -9,10 +8,34 @@ export const getUserData = async () => {
       return data.user;
     }
     throw new Error("Failed to fetch user");
-  } catch (err:any) {
+  } catch (err: any) {
     const message =
       err.response?.data?.message || "Failed to fetch authenticated user.";
     console.log("Auto-auth error:", message);
-    throw new Error(message); 
+    throw new Error(message);
+  }
+};
+
+// update user dat
+type UpdateType = {
+  profile?: File;
+  fullName?: string;
+  phoneNumber?: string;
+};
+export const updateUserData = async (formData: UpdateType) => {
+  try {
+    const { data } = await axiosInstance.put(
+      "/user/update-user-data",
+      formData
+    );
+    if (data.success) {
+      return data;
+    } else {
+      return data.message;
+    }
+  } catch (err: any) {
+    const message =
+      err?.response?.data?.message || "Something went wrong during update";
+    throw new Error(Array.isArray(message) ? message[0] : message);
   }
 };

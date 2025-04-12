@@ -109,7 +109,15 @@ const Sidebar = () => {
         {/* User Avatar */}
         {isSidebarOpen && (
           <div className="w-10 h-10 rounded-full bg-neutral-300 flex items-center justify-center text-white">
-            <User className="w-5 h-5 text-black" />
+            {user?.profile ? (
+              <img
+                src={user?.profile}
+                alt="profile"
+                className="size-full object-cover rounded-full"
+              />
+            ) : (
+              <User className="w-5 h-5 text-black" />
+            )}
           </div>
         )}
 
