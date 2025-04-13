@@ -29,6 +29,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { makeTransaction } from "@/api/transactionApi";
 
 const TransactionTypes = [
   { id: 1, title: "income" },
@@ -72,6 +75,15 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
+// transaction type
+type TransactionData = {
+  description: string;
+  amount: number;
+  date: string;
+  category: string;
+  type: string;
+};
+
 const TransactionForm = ({
   closeForm,
 }: {
@@ -84,6 +96,7 @@ const TransactionForm = ({
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -92,13 +105,30 @@ const TransactionForm = ({
   const selectedDate = watch("date");
   // const category = watch("category");
 
+  //mutation
+  const mutation = useMutation({
+    mutationFn: (data: TransactionData) => makeTransaction(data),
+    onSuccess: (data) => {
+      toast.success(data.message);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   const onSubmit = (data: FormData) => {
     const finalData = {
       ...data,
       amount: Number(data.amount),
+      date: String(data.date),
       type: transactionType,
     };
-    console.log("Transaction Submitted:", finalData);
+    mutation.mutate(finalData, {
+      onSuccess: () => {
+        reset();
+        setTransactionType("income");
+      },
+    });
   };
 
   return (

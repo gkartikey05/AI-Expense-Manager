@@ -16,7 +16,7 @@ export const getUserData = async () => {
   }
 };
 
-// update user dat
+// update user data
 type UpdateType = {
   profile?: File;
   fullName?: string;
