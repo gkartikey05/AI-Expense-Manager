@@ -101,7 +101,7 @@ const TransactionForm = ({
 }: {
   closeForm: (value: boolean) => void;
   transactionData?: UpdateTransaction | null;
-  setTransactionDataToNull: (value: null) => void;
+  setTransactionDataToNull?: (value: null) => void;
 }) => {
   const [transactionType, setTransactionType] = useState<string>(
     transactionData ? `${transactionData.type.toLowerCase()}` : "income"
