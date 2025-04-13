@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
@@ -19,6 +19,7 @@ const App = () => {
   const queryClient = new QueryClient();
 
   const setUser = useUserStore((state) => state.setUser);
+  const navigate = useNavigate();
 
   // auto login if token is present
   useEffect(() => {
@@ -27,9 +28,10 @@ const App = () => {
         const user = await getUserData();
         if (user) {
           setUser(user);
+          navigate("/dashboard");
         }
       } catch (err) {
-        console.log("User not logged in:",err);
+        console.log("User not logged in:", err);
       }
     };
 
