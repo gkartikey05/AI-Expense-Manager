@@ -11,7 +11,7 @@ const budgetRouter = express.Router();
 
 budgetRouter.route("/add-budget").post(auth, addBudget);
 budgetRouter.route("/update-budget/:id").put(auth, updateBudget);
-budgetRouter.route("/:id").delete(auth, deleteBudget);
+budgetRouter.route("/delete-budget/:id").delete(auth, deleteBudget);
 budgetRouter.route("/get-budgets").get(auth, getAllBudgets);
 
 module.exports = budgetRouter;

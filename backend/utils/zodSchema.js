@@ -28,7 +28,7 @@ const userSchema = z.object({
 // transaction type
 const transactionSchema = z.object({
   description: z.string().trim().nonempty("Description is required"),
-  category: z.string().trim().toUpperCase().nonempty("Category is required"),
+  category: z.string().trim().nonempty("Category is required"),
   amount: z.number().positive("Amount must be a positive number").min(1),
   type: z.string().toUpperCase().nonempty("Type is required"),
   date: z.string().trim().nonempty("Date is required"),
@@ -36,14 +36,11 @@ const transactionSchema = z.object({
 
 // budget schema
 const budgetSchema = z.object({
-  category: z.string().toUpperCase().nonempty("Category is required"),
+  category: z.string().nonempty("Category is required"),
   amount: z.number().positive("Amount is required"),
 });
 
-// update budget amount schema
-const updatebudgetAmountSchema = z.object({
-  amount: z.number().positive("Amount is required"),
-});
+
 
 //goal schema
 const goalSchema = z.object({
@@ -66,7 +63,6 @@ module.exports = {
   userSchema,
   transactionSchema,
   budgetSchema,
-  updatebudgetAmountSchema,
   goalSchema,
   updateGoalSchema,
 };

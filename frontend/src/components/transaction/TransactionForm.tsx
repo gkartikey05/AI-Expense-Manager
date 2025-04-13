@@ -141,9 +141,8 @@ const TransactionForm = ({
 
     onSuccess: (data) => {
       toast.success(data.message);
-      queryClient.invalidateQueries({
-        queryKey: ["transactions"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["budgets"], exact: true });
       setTransactionDataToNull(null);
       closeForm(false);
     },
@@ -175,7 +174,10 @@ const TransactionForm = ({
       <Card className="w-full max-w-lg bg-white relative">
         {/* form close button */}
         <button
-          onClick={() => closeForm(false)}
+          onClick={() => {
+            closeForm(false);
+            setTransactionDataToNull(null);
+          }}
           className="absolute top-2 right-2 cursor-pointer"
         >
           <X className="size-5" />

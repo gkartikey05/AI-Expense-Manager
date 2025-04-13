@@ -1,9 +1,31 @@
+import { getUserData } from "@/api/userApi";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
+import { useUserStore } from "@/store/userStore";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
+  
+const setUser = useUserStore((state) => state.setUser);
   const navigate = useNavigate();
+
+  // auto login if token is present
+  useEffect(() => {
+    const restoreUser = async () => {
+      try {
+        const user = await getUserData();
+        if (user) {
+          setUser(user);
+          navigate("/dashboard");
+        }
+      } catch (err) {
+        console.log("User not logged in:", err);
+      }
+    };
+
+    restoreUser();
+  }, [setUser]);
 
   return (
     <>

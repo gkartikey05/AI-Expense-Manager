@@ -197,9 +197,10 @@ const getAllTransaction = async (req, res) => {
     });
 
     if (!transactions.length) {
-      return res.status(404).json({
-        success: false,
+      return res.status(200).json({
+        success: true,
         message: "No transactions found!",
+        transactions: [],
       });
     }
 

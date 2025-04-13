@@ -19,7 +19,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { X } from "lucide-react";
+import { Loader, X } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addBudget, updateBudget } from "@/api/budgetApi";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 const categories = [
   "Food",
@@ -48,7 +52,21 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-const BudgetForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
+type BudgetDataType = {
+  id: number;
+  category: string;
+  amount: string;
+};
+
+const BudgetForm = ({
+  closeForm,
+  budgetData,
+  setUpdateDataToNull,
+}: {
+  closeForm: (value: boolean) => void;
+  budgetData: BudgetDataType | null;
+  setUpdateDataToNull: (value: null) => void;
+}) => {
   const {
     register,
     handleSubmit,
@@ -58,12 +76,40 @@ const BudgetForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
     resolver: zodResolver(formSchema),
   });
 
+  useEffect(() => {
+    if (budgetData) {
+      setValue("category", budgetData.category);
+      setValue("amount", budgetData.amount);
+    }
+  }, [budgetData, setValue]);
+
+  // mutation -add and update
+  const queryClient = useQueryClient();
+  type BudgetType = {
+    category: string;
+    amount: number;
+  };
+  const mutation = useMutation({
+    mutationFn: (data: BudgetType) =>
+      budgetData ? updateBudget(data, budgetData.id) : addBudget(data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["budgets"] });
+      toast.success(data.message);
+      setUpdateDataToNull(null);
+      closeForm(false);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   const onSubmit = (data: FormData) => {
     const finalData = {
       ...data,
       amount: Number(data.amount),
     };
     console.log("Budget Submitted:", finalData);
+    mutation.mutate(finalData);
   };
 
   return (
@@ -71,14 +117,19 @@ const BudgetForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
       <Card className="w-full max-w-lg bg-white relative">
         {/* form close button */}
         <button
-          onClick={() => closeForm(false)}
+          onClick={() => {
+            closeForm(false);
+            setUpdateDataToNull(null);
+          }}
           className="absolute top-2 right-2 cursor-pointer"
         >
           <X className="size-5" />
         </button>
 
         <CardHeader>
-          <CardTitle className="text-xl font-medium">Add Budget</CardTitle>
+          <CardTitle className="text-xl font-medium">
+            {budgetData ? "Update Budget" : "Add Budget"}
+          </CardTitle>
           <CardDescription className="text-gray-500">
             Create a new budget category and amount
           </CardDescription>
@@ -119,8 +170,18 @@ const BudgetForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
             </div>
 
             {/* Submit */}
-            <Button type="submit" className="w-full mt-4">
-              Add Budget
+            <Button
+              type="submit"
+              disabled={mutation.isPending}
+              className="w-full mt-4 cursor-pointer"
+            >
+              {mutation.isPending ? (
+                <Loader className="size-4 animate-spin" />
+              ) : budgetData ? (
+                "Update Budget"
+              ) : (
+                "Add Budget"
+              )}
             </Button>
           </form>
         </CardContent>

@@ -57,7 +57,10 @@ const TransactionPage = () => {
   const { data, isError, isPending, error } = useQuery({
     queryKey: ["transactions", filter, sort, search, page],
     queryFn: () => getTransaction(filter, sort, search, page),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     placeholderData: keepPreviousData,
   });
 
@@ -165,7 +168,12 @@ const TransactionPage = () => {
           )}
 
           {/* table */}
-          {data?.transactions && (
+
+          {data?.transactions.length === 0 ? (
+            <div className="h-32 flex items-center justify-center">
+              <p>{data?.message || "No Transactions to show"}</p>
+            </div>
+          ) : (
             <Table className="mt-5">
               <TableHeader>
                 <TableRow className="text-lg">
@@ -319,7 +327,11 @@ const TransactionPage = () => {
 
       {/* transactiomn form */}
       {openTransactionForm && (
-        <TransactionForm transactionData={transactionToUpdate} setTransactionDataToNull={setTransactionToUpdate} closeForm={setOpenTransactionForm} />
+        <TransactionForm
+          transactionData={transactionToUpdate}
+          setTransactionDataToNull={setTransactionToUpdate}
+          closeForm={setOpenTransactionForm}
+        />
       )}
     </>
   );
