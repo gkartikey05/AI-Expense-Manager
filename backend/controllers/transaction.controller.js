@@ -40,8 +40,6 @@ const updateTransaction = async (req, res) => {
   const userId = req.userId;
   const id = req.params.id;
 
-  console.log("id:", id);
-
   try {
     const result = transactionSchema.safeParse(req.body);
 
@@ -87,7 +85,7 @@ const updateTransaction = async (req, res) => {
   }
 };
 
-// --------------get all transcation based on filters-----------------
+// --------------get all transcation of a user based on filters-----------------
 const getAllTransaction = async (req, res) => {
   const userId = req.userId;
   const filter = req.query.filter;
@@ -201,7 +199,7 @@ const getAllTransaction = async (req, res) => {
     if (!transactions.length) {
       return res.status(404).json({
         success: false,
-        message: "No transactions found",
+        message: "No transactions found!",
       });
     }
 

@@ -14,6 +14,7 @@ import { useDashboardToggle } from "@/contexts/DashboardToggleContext";
 import { useUserStore } from "@/store/userStore";
 import { logoutUser } from "@/api/userAuth";
 import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 const navItems = [
   {
@@ -50,11 +51,14 @@ const Sidebar = () => {
   const clearUser = useUserStore((state) => state.clearUser);
   const navigate = useNavigate();
 
+  const queryClient = useQueryClient();
+
   const logout = async () => {
     try {
       const res = await logoutUser();
       if (res.success) {
         clearUser();
+        queryClient.clear();
         navigate("/");
         toast.success(res.message);
       }

@@ -1,3 +1,4 @@
+import { deleteTransaction, getTransaction } from "@/api/transactionApi";
 import DashboardHeader from "@/components/DashboardHeader";
 import TransactionForm from "@/components/transaction/TransactionForm";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -33,42 +33,52 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Search, SquarePen, Trash } from "lucide-react";
-import { useState } from "react";
-
-const mockTransactions = [
-  {
-    id: 1,
-    description: "Grocery Shopping",
-    amount: -120.5,
-    date: "2023-05-10",
-    category: "Food",
-  },
-  {
-    id: 2,
-    description: "Salary Deposit",
-    amount: 3500.0,
-    date: "2023-05-01",
-    category: "Income",
-  },
-  {
-    id: 3,
-    description: "Electric Bill",
-    amount: -85.2,
-    date: "2023-05-05",
-    category: "Utilities",
-  },
-  {
-    id: 4,
-    description: "Restaurant Dinner",
-    amount: -65.8,
-    date: "2023-05-08",
-    category: "Food",
-  },
-];
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { Loader, Plus, Search, SquarePen, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const TransactionPage = () => {
   const [openTransactionForm, setOpenTransactionForm] = useState(false);
+  const [filter, setFilter] = useState<string>("");
+  const [sort, setSort] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState<string>("1");
+  const [transactionToUpdate, setTransactionToUpdate] = useState(null);
+
+  const queryClient = useQueryClient();
+
+  // query to get data
+  const { data, isError, isPending, error } = useQuery({
+    queryKey: ["transactions", filter, sort, search, page],
+    queryFn: () => getTransaction(filter, sort, search, page),
+    staleTime: 5 * 60 * 1000,
+    placeholderData: keepPreviousData,
+  });
+
+  //mutation query to delete data
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteTransaction(id),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ["transactions", filter, sort, search, page],
+      });
+
+      toast.success(data?.message);
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+    },
+  });
+
+  useEffect(() => {
+    setPage("1");
+  }, [filter, sort, search]);
 
   return (
     <>
@@ -93,6 +103,7 @@ const TransactionPage = () => {
             <div className="relative w-full md:max-w-md">
               <Search className="size-5 text-gray-500 absolute top-1/2 -translate-y-1/2 left-3" />
               <Input
+                onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search transactions by description"
                 className="pl-10 shadow-none w-full"
               />
@@ -101,7 +112,7 @@ const TransactionPage = () => {
             {/* filter & sort */}
             <div className="flex flex-row items-center gap-4 w-full md:w-auto">
               {/* filter */}
-              <Select>
+              <Select onValueChange={(value) => setFilter(value)}>
                 <SelectTrigger className="flex-1 w-[180px]">
                   <SelectValue placeholder="Filter" />
                 </SelectTrigger>
@@ -116,7 +127,7 @@ const TransactionPage = () => {
               </Select>
 
               {/* sort */}
-              <Select>
+              <Select onValueChange={(value) => setSort(value)}>
                 <SelectTrigger className="flex-1 w-[180px]">
                   <SelectValue placeholder="Sort" />
                 </SelectTrigger>
@@ -139,61 +150,134 @@ const TransactionPage = () => {
           </div>
           {/* search ,sort ,filter ends */}
 
+          {/* loder */}
+          {isPending && (
+            <div className="h-32 flex items-center justify-center">
+              <Loader className="size-8 text-gray-600 animate-spin" />
+            </div>
+          )}
+
+          {/* error */}
+          {isError && (
+            <div className="h-32 flex items-center justify-center">
+              <p>{error.message}</p>
+            </div>
+          )}
+
           {/* table */}
-          <Table className="mt-5">
-            <TableHeader>
-              <TableRow className="text-lg">
-                <TableHead className="text-left">Description</TableHead>
-                <TableHead className="text-left">Category</TableHead>
-                <TableHead className="text-left">Date</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-                <TableHead className="text-center">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {mockTransactions.map((item) => (
-                <TableRow key={item.description}>
-                  <TableCell className="text-left font-medium">
-                    {item.description}
-                  </TableCell>
-                  <TableCell className="text-left">{item.category}</TableCell>
-                  <TableCell className="text-left">{item.date}</TableCell>
-                  <TableCell
-                    className={`text-right ${
-                      item.amount < 0 ? "text-red-500" : "text-green-500"
-                    }`}
-                  >
-                    {item.amount < 0 ? "-" : "+"}$
-                    {Math.abs(item.amount).toFixed(2)}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-center gap-4">
-                      <SquarePen className="size-4 text-gray-600 cursor-pointer" />
-                      <Trash className="size-4 text-red-500 cursor-pointer" />
-                    </div>
-                  </TableCell>
+          {data?.transactions && (
+            <Table className="mt-5">
+              <TableHeader>
+                <TableRow className="text-lg">
+                  <TableHead className="text-left">Description</TableHead>
+                  <TableHead className="text-left">Category</TableHead>
+                  <TableHead className="text-left">Type</TableHead>
+                  <TableHead className="text-left">Date</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                  <TableHead className="text-center">Action</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {data?.transactions?.map((item: any) => (
+                  <TableRow key={item.description}>
+                    <TableCell className="text-left font-medium">
+                      {item.description}
+                    </TableCell>
+                    <TableCell className="text-left capitalize">
+                      {item.category.toLowerCase()}
+                    </TableCell>
+                    <TableCell className="text-left capitalize">
+                      {item.type.toLowerCase()}
+                    </TableCell>
+                    <TableCell className="text-left">
+                      {new Date(item.date).toDateString()}
+                    </TableCell>
+                    <TableCell
+                      className={`text-right ${
+                        item.amount < 0 ? "text-red-500" : "text-green-500"
+                      }`}
+                    >
+                      {item.amount < 0 ? "-" : "+"}Rs
+                      {Math.abs(item.amount).toFixed(2)}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center justify-center gap-4">
+                        {/* edit button */}
+                        <button
+                          onClick={() => {
+                            setTransactionToUpdate(item);
+                            setOpenTransactionForm(true);
+                          }}
+                          className="p-2 rounded-md border border-transparent bg-transparent hover:bg-gray-100 focus:outline-none"
+                        >
+                          <SquarePen className="size-4 text-gray-600 cursor-pointer" />
+                        </button>
+                        {/* delete button */}
+                        <button
+                          onClick={() => deleteMutation.mutate(item?.id)}
+                          className="p-2 rounded-full bg-transparent border-0 focus:outline-none"
+                          aria-label="Delete Transaction"
+                        >
+                          <Trash className="size-4 text-red-500 cursor-pointer" />
+                        </button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
 
           {/* pagination */}
-          <Pagination className="mt-4">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          {data?.totalPages > 1 && (
+            <Pagination className="mt-4">
+              <PaginationContent>
+                {/* Previous */}
+                <PaginationItem className="cursor-pointer">
+                  <PaginationPrevious
+                    onClick={() =>
+                      setPage((prev) =>
+                        Math.max(1, Number(prev) - 1).toString()
+                      )
+                    }
+                    className={
+                      Number(page) === 1 ? "pointer-events-none opacity-50" : ""
+                    }
+                  />
+                </PaginationItem>
+
+                {/* Page Numbers */}
+                {Array.from({ length: data.totalPages }, (_, i) => i + 1).map(
+                  (p) => (
+                    <PaginationItem key={p} className="cursor-pointer">
+                      <PaginationLink
+                        onClick={() => setPage(p.toString())}
+                        isActive={Number(page) === p}
+                      >
+                        {p}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )
+                )}
+
+                {/* Next */}
+                <PaginationItem className="cursor-pointer">
+                  <PaginationNext
+                    onClick={() =>
+                      setPage((prev) =>
+                        Math.min(data.totalPages, Number(prev) + 1).toString()
+                      )
+                    }
+                    className={
+                      Number(page) === data.totalPages
+                        ? "pointer-events-none opacity-50"
+                        : ""
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
         </div>
 
         {/* stats */}
@@ -234,7 +318,9 @@ const TransactionPage = () => {
       </section>
 
       {/* transactiomn form */}
-      {openTransactionForm && <TransactionForm closeForm={setOpenTransactionForm}/>}
+      {openTransactionForm && (
+        <TransactionForm transactionData={transactionToUpdate} setTransactionDataToNull={setTransactionToUpdate} closeForm={setOpenTransactionForm} />
+      )}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,9 +29,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { makeTransaction } from "@/api/transactionApi";
+import { makeTransaction, updateTransaction } from "@/api/transactionApi";
 
 const TransactionTypes = [
   { id: 1, title: "income" },
@@ -84,12 +84,28 @@ type TransactionData = {
   type: string;
 };
 
+// for updating
+type UpdateTransaction = {
+  id: string;
+  description: string;
+  amount: string;
+  date: string;
+  category: string;
+  type: string;
+};
+
 const TransactionForm = ({
   closeForm,
+  transactionData,
+  setTransactionDataToNull,
 }: {
   closeForm: (value: boolean) => void;
+  transactionData?: UpdateTransaction | null;
+  setTransactionDataToNull: (value: null) => void;
 }) => {
-  const [transactionType, setTransactionType] = useState<string>("income");
+  const [transactionType, setTransactionType] = useState<string>(
+    transactionData ? `${transactionData.type.toLowerCase()}` : "income"
+  );
 
   const {
     register,
@@ -105,17 +121,39 @@ const TransactionForm = ({
   const selectedDate = watch("date");
   // const category = watch("category");
 
-  //mutation
+  useEffect(() => {
+    if (transactionData) {
+      setValue("description", transactionData.description);
+      setValue("amount", transactionData.amount);
+      setValue("category", transactionData.category.toLowerCase());
+      setValue("date", new Date(transactionData.date));
+    }
+  }, [transactionData, setValue]);
+
+  const queryClient = useQueryClient();
+
+  // Add or update transaction mutation
   const mutation = useMutation({
-    mutationFn: (data: TransactionData) => makeTransaction(data),
+    mutationFn: (data: TransactionData) =>
+      transactionData
+        ? updateTransaction(data, transactionData?.id)
+        : makeTransaction(data),
+
     onSuccess: (data) => {
       toast.success(data.message);
+      queryClient.invalidateQueries({
+        queryKey: ["transactions"],
+      });
+      setTransactionDataToNull(null);
+      closeForm(false);
     },
-    onError: (error) => {
-      toast.error(error.message);
+
+    onError: (error: any) => {
+      toast.error(error?.message || "Something went wrong");
     },
   });
 
+  // on submit handler
   const onSubmit = (data: FormData) => {
     const finalData = {
       ...data,
@@ -123,6 +161,7 @@ const TransactionForm = ({
       date: String(data.date),
       type: transactionType,
     };
+    console.log("final data:", finalData);
     mutation.mutate(finalData, {
       onSuccess: () => {
         reset();
@@ -143,7 +182,9 @@ const TransactionForm = ({
         </button>
 
         <CardHeader>
-          <CardTitle className="text-xl font-medium">Add Transaction</CardTitle>
+          <CardTitle className="text-xl font-medium">
+            {transactionData ? "Edit Transaction" : "Add Transaction"}
+          </CardTitle>
           <CardDescription className="text-gray-500">
             Enter your transaction details below
           </CardDescription>
@@ -257,8 +298,8 @@ const TransactionForm = ({
             </div>
 
             {/* Submit */}
-            <Button type="submit" className="w-full mt-4">
-              Add Transaction
+            <Button type="submit" className="w-full mt-4 cursor-pointer">
+              {transactionData ? "Save Updates" : "Add Transaction"}
             </Button>
           </form>
         </CardContent>
