@@ -143,7 +143,9 @@ const TransactionForm = ({
       toast.success(data.message);
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
       queryClient.invalidateQueries({ queryKey: ["budgets"], exact: true });
-      setTransactionDataToNull(null);
+      if (typeof setTransactionDataToNull === "function") {
+        setTransactionDataToNull(null);
+      }
       closeForm(false);
     },
 
@@ -176,7 +178,9 @@ const TransactionForm = ({
         <button
           onClick={() => {
             closeForm(false);
-            setTransactionDataToNull(null);
+            if (typeof setTransactionDataToNull === "function") {
+              setTransactionDataToNull(null);
+            }
           }}
           className="absolute top-2 right-2 cursor-pointer"
         >
