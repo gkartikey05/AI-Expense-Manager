@@ -39,3 +39,17 @@ export const updateUserData = async (formData: UpdateType) => {
     throw new Error(Array.isArray(message) ? message[0] : message);
   }
 };
+
+// get user financial data
+export const getData = async () => {
+  try {
+    const { data } = await axiosInstance.get("/user/get-data");
+    if (data.success) {
+      return data.data;
+    }
+    throw new Error("Failed to fetch data");
+  } catch (err: any) {
+    const message = err.response?.data?.message || "Failed to fetch Data";
+    throw new Error(message);
+  }
+};

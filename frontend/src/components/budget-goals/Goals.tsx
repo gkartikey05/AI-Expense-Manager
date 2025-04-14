@@ -42,6 +42,7 @@ const Goals = () => {
     mutationFn: (id: number) => deletegoal(id),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["goals"] });
+      queryClient.invalidateQueries({ queryKey: ["financialData"] });
       toast.success(data.message);
     },
     onError: (error) => {

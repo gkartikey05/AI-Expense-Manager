@@ -94,6 +94,7 @@ const BudgetForm = ({
       budgetData ? updateBudget(data, budgetData.id) : addBudget(data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
+      queryClient.invalidateQueries({ queryKey: ["financialData"] });
       toast.success(data.message);
       setUpdateDataToNull(null);
       closeForm(false);

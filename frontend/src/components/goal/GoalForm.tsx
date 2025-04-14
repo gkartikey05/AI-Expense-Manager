@@ -71,6 +71,7 @@ const GoalForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
     mutationFn: (data: GoalType) => addGoal(data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["goals"] });
+      queryClient.invalidateQueries({ queryKey: ["financialData"] });
       reset();
       toast.success(data.message);
     },

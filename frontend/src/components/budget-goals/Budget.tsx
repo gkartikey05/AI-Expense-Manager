@@ -13,14 +13,17 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteBudget, getBudgets } from "@/api/budgetApi";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useDataStore } from "@/store/userDataStore";
 
 const Budget = () => {
   const [openBudgetForm, setOpenBudgetForm] = useState(false);
   const [budgetToUpdate, setBudgetToUpdate] = useState(null);
+  const financialData = useDataStore((state) => state.data);
 
   const queryClient = useQueryClient();
   // percentage budget used
   const calculateUsedBudgetPercent = (amount: number, used: number): number => {
+    if (used === 0) return 0;
     return (used / amount) * 100;
   };
 
@@ -39,6 +42,7 @@ const Budget = () => {
     mutationFn: (id: number) => deleteBudget(id),
     onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
+      queryClient.invalidateQueries({ queryKey: ["financialData"] });
       toast.success(data.message);
     },
     onError: (error) => {
@@ -67,10 +71,20 @@ const Budget = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-semibold">Rs 25,000</p>
+              <p className="text-3xl font-semibold">
+                Rs {financialData?.totalBudget.toFixed(2)}
+              </p>
             </CardContent>
             <CardFooter>
-              <p className="text-gray-500">For May,2025</p>
+              <p className="text-gray-500">
+                <p>
+                  for{" "}
+                  {new Date().toLocaleString("default", {
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+              </p>
             </CardFooter>
           </Card>
           {/* used */}
@@ -79,10 +93,19 @@ const Budget = () => {
               <CardTitle className="text-xl font-normal">Spent</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-semibold">Rs 10,000</p>
+              <p className="text-3xl font-semibold">
+                Rs {financialData?.totalBudgetSpend.toFixed(2)}
+              </p>
             </CardContent>
             <CardFooter>
-              <p className="text-gray-500">45% of your budget used</p>
+              <p className="text-gray-500">
+                {financialData &&
+                  calculateUsedBudgetPercent(
+                    financialData.totalBudget,
+                    financialData.totalBudgetSpend
+                  ).toFixed(1)}
+                % of your budget used
+              </p>
             </CardFooter>
           </Card>
           {/* Remaining */}
@@ -91,10 +114,25 @@ const Budget = () => {
               <CardTitle className="text-xl font-normal">Remaining</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-semibold">Rs 15,000</p>
+              <p className="text-3xl font-semibold">
+                Rs{" "}
+                {financialData &&
+                  (
+                    financialData.totalBudget - financialData.totalBudgetSpend
+                  ).toFixed(2)}
+              </p>
             </CardContent>
             <CardFooter>
-              <p className="text-gray-500">55% of your budget used</p>
+              <p className="text-gray-500">
+                {financialData &&
+                  `${(
+                    100 -
+                    calculateUsedBudgetPercent(
+                      financialData.totalBudget,
+                      financialData.totalBudgetSpend
+                    )
+                  ).toFixed(1)}% of your budget remaining`}
+              </p>
             </CardFooter>
           </Card>
         </div>
@@ -175,7 +213,11 @@ const Budget = () => {
         )}
       </div>
       {openBudgetForm && (
-        <BudgetForm budgetData={budgetToUpdate} setUpdateDataToNull={setBudgetToUpdate} closeForm={setOpenBudgetForm} />
+        <BudgetForm
+          budgetData={budgetToUpdate}
+          setUpdateDataToNull={setBudgetToUpdate}
+          closeForm={setOpenBudgetForm}
+        />
       )}
     </>
   );

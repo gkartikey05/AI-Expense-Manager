@@ -1,9 +1,33 @@
+import { getData } from "@/api/userApi";
 import Sidebar from "@/components/Sidebar";
 import { useDashboardToggle } from "@/contexts/DashboardToggleContext";
+import { useDataStore } from "@/store/userDataStore";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
   const { isSidebarOpen } = useDashboardToggle();
+  const setData = useDataStore((state) => state.setData);
+
+  const { data, isError, error} = useQuery({
+    queryKey: ["financialData"],
+    queryFn: getData,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setData(data);
+    }
+  }, [data,setData]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(error.message);
+    }
+  }, [isError, error]);
+
 
   return (
     <section className="relative flex items-start h-screen">
@@ -18,7 +42,7 @@ const Dashboard = () => {
 
       {/* Main content */}
       <main className="flex-1 h-full overflow-y-scroll hide-scrollbar">
-        <Outlet /> 
+        <Outlet />
       </main>
     </section>
   );

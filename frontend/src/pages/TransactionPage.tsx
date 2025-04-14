@@ -33,6 +33,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useDataStore } from "@/store/userDataStore";
 import {
   keepPreviousData,
   useMutation,
@@ -53,6 +54,8 @@ const TransactionPage = () => {
 
   const queryClient = useQueryClient();
 
+  const financeData = useDataStore((state) => state.data);
+
   // query to get data
   const { data, isError, isPending, error } = useQuery({
     queryKey: ["transactions", filter, sort, search, page],
@@ -71,7 +74,9 @@ const TransactionPage = () => {
       queryClient.invalidateQueries({
         queryKey: ["transactions", filter, sort, search, page],
       });
-
+      queryClient.invalidateQueries({
+        queryKey: ["financialData"],
+      });
       toast.success(data?.message);
     },
     onError: (error) => {
@@ -202,12 +207,15 @@ const TransactionPage = () => {
                     </TableCell>
                     <TableCell
                       className={`text-right ${
-                        item.amount < 0 ? "text-red-500" : "text-green-500"
+                        item.type === "EXPENSE"
+                          ? "text-red-500"
+                          : "text-green-500"
                       }`}
                     >
-                      {item.amount < 0 ? "-" : "+"}Rs
+                      {item.type === "EXPENSE" ? "-" : "+"} Rs{" "}
                       {Math.abs(item.amount).toFixed(2)}
                     </TableCell>
+
                     <TableCell>
                       <div className="flex items-center justify-center gap-4">
                         {/* edit button */}
@@ -296,7 +304,7 @@ const TransactionPage = () => {
               <CardTitle className="text-xl font-normal">Income</CardTitle>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-green-500">
-              +Rs 70,000.00
+              +Rs {financeData && financeData?.totalIncome.toFixed(2)}
             </CardContent>
             <CardFooter className="text-gray-500">Your Total income</CardFooter>
           </Card>
@@ -306,7 +314,7 @@ const TransactionPage = () => {
               <CardTitle className="text-xl font-normal">Expense</CardTitle>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-red-500">
-              +Rs 40,000.00
+              -Rs {financeData && financeData?.totalExpense.toFixed(2)}
             </CardContent>
             <CardFooter className="text-gray-500">
               Your Total Expense
@@ -318,8 +326,11 @@ const TransactionPage = () => {
               <CardTitle className="text-xl font-normal">Net Flow</CardTitle>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-green-500">
-              +Rs 30,000.00
+              +Rs{" "}
+              {financeData &&
+                (financeData.totalIncome - financeData.totalExpense).toFixed(2)}
             </CardContent>
+
             <CardFooter className="text-gray-500">Your net flow</CardFooter>
           </Card>
         </div>

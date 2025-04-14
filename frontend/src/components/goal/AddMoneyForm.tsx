@@ -52,6 +52,7 @@ const AddMoneyForm = ({
     mutationFn: (data: { amount: number }) => addMoneyTogoal(id, data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["goals"] });
+      queryClient.invalidateQueries({ queryKey: ["financialData"] });
       reset();
       closeForm(false);
       toast.success(data.message);
