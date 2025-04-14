@@ -11,7 +11,7 @@ const Dashboard = () => {
       <aside
         className={`${
           isSidebarOpen ? "w-[250px]" : "w-0 md:w-[50px]"
-        } h-full border-r border-r-black/20 transition-[width] duration-300 ease-in-out overflow-hidden`}
+        } absolute md:relative z-50 bg-white h-full border-r border-r-black/20 transition-[width] duration-300 ease-in-out overflow-hidden`}
       >
         <Sidebar />
       </aside>
