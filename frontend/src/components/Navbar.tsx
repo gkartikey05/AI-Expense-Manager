@@ -30,13 +30,13 @@ const Navbar = ({ isAuth = false }: { isAuth: boolean }) => {
             <Button
               onClick={() => navigate("/login")}
               variant="outline"
-              className="cursor-pointer"
+              className="cursor-pointer shadow-none sm:px-8"
             >
               Login
             </Button>
             <Button
               onClick={() => navigate("/signup")}
-              className="cursor-pointer"
+              className="cursor-pointer sm:px-8"
             >
               Sign Up
             </Button>
