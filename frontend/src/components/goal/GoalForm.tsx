@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, X } from "lucide-react";
+import { Calendar as CalendarIcon, Loader, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -21,7 +21,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addGoal } from "@/api/goalApi";
+import toast from "react-hot-toast";
 
 // zod schema
 const formSchema = z.object({
@@ -38,7 +40,7 @@ const formSchema = z.object({
     .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
       message: "Amount must be a positive number",
     }),
-  targetDate: z.date({ required_error: "Date is required" }),
+  targetDate: z.date().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -49,20 +51,44 @@ const GoalForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
-
   const selectedDate = watch("targetDate");
 
+  const queryClient = useQueryClient();
+
+  // mutation - add or update
+  type GoalType = {
+    goalName: string;
+    targetAmount: number;
+    savedAmount: number;
+    targetDate?: string;
+  };
+  const mutation = useMutation({
+    mutationFn: (data: GoalType) => addGoal(data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["goals"] });
+      reset();
+      toast.success(data.message);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  // handle submit
   const onSubmit = (data: FormData) => {
     const finalData = {
       ...data,
       targetAmount: Number(data.targetAmount),
       savedAmount: Number(data.savedAmount),
+      targetDate: String(data.targetDate),
     };
     console.log("Goal Submitted:", finalData);
+    mutation.mutate(finalData);
   };
 
   return (
@@ -122,7 +148,7 @@ const GoalForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
 
             {/* Date Picker */}
             <div className="space-y-2">
-              <Label>Target Date</Label>
+              <Label>Target Date(Optional)</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -157,8 +183,16 @@ const GoalForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
             </div>
 
             {/* Submit */}
-            <Button type="submit" className="w-full mt-4">
-              Add Goal
+            <Button
+              type="submit"
+              disabled={mutation.isPending}
+              className="w-full mt-4"
+            >
+              {mutation.isPending ? (
+                <Loader className="size-4 animate-spin" />
+              ) : (
+                "Add Goal"
+              )}
             </Button>
           </form>
         </CardContent>

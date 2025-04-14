@@ -40,67 +40,11 @@ const addGoal = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "New goal added successfully.",
+      message: "goal added",
       newGoal,
     });
   } catch (err) {
     console.error("Add Goal Error:", err);
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error.",
-    });
-  }
-};
-
-// ---------update goal-------------------
-const updateGoal = async (req, res) => {
-  const userId = req.userId;
-  const id = Number(req.params.id);
-
-  try {
-    const result = updateGoalSchema.safeParse(req.body);
-
-    if (!result.success) {
-      return res.status(400).json({
-        success: false,
-        message: result.error.issues.map((i) => i.message),
-      });
-    }
-
-    // Check if the goal exists
-    const existingGoal = await prisma.goal.findFirst({
-      where: {
-        id,
-        userId,
-      },
-    });
-
-    if (!existingGoal) {
-      return res.status(404).json({
-        success: false,
-        message: "Goal not found",
-      });
-    }
-
-    const { targetAmount, savedAmount } = result.data;
-
-    const updatedGoal = await prisma.goal.update({
-      where: {
-        id: existingGoal.id,
-      },
-      data: {
-        targetAmount,
-        savedAmount,
-      },
-    });
-
-    return res.status(200).json({
-      success: true,
-      message: "Goal updated successfully.",
-      updatedGoal,
-    });
-  } catch (err) {
-    console.error("Update Goal Error:", err);
     return res.status(500).json({
       success: false,
       message: "Internal server error.",
@@ -125,7 +69,7 @@ const deleteGoal = async (req, res) => {
     if (!existingGoal) {
       return res.status(404).json({
         success: false,
-        message: "Goal not found or does not belong to the user.",
+        message: "Goal not found",
       });
     }
 
@@ -211,7 +155,7 @@ const addAmountToGoal = async (req, res) => {
         id: goal.id,
       },
       data: {
-        amount: goal.amount + amount,
+        savedAmount: Number(goal.savedAmount) + amount,
       },
     });
 
@@ -231,7 +175,6 @@ const addAmountToGoal = async (req, res) => {
 
 module.exports = {
   addGoal,
-  updateGoal,
   deleteGoal,
   getAllGoals,
   addAmountToGoal,

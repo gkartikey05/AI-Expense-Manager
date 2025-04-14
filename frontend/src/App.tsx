@@ -10,8 +10,29 @@ import InsightPage from "./pages/InsightPage";
 import SettingPage from "./pages/SettingPage";
 import NotFound from "./pages/Notfound";
 import { Toaster } from "react-hot-toast";
+import { useUserStore } from "./store/userStore";
+import { useEffect } from "react";
+import { getUserData } from "./api/userApi";
 
 const App = () => {
+  const setUser = useUserStore((state) => state.setUser);
+
+  // auto login if token is present and share data globally
+  useEffect(() => {
+    const restoreUser = async () => {
+      try {
+        const user = await getUserData();
+        if (user) {
+          setUser(user);
+        }
+      } catch (err) {
+        console.log("User not logged in:", err);
+      }
+    };
+
+    restoreUser();
+  }, [setUser]);
+
   return (
     <>
       <Toaster />

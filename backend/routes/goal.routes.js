@@ -3,7 +3,6 @@ const auth = require("../middleware/auth");
 
 const {
   addGoal,
-  updateGoal,
   deleteGoal,
   getAllGoals,
   addAmountToGoal,
@@ -13,7 +12,6 @@ const goalRouter = express.Router();
 
 goalRouter.post("/add-goal", auth, addGoal);
 
-goalRouter.put("/update-goal/:id", auth, updateGoal);
 
 goalRouter.delete("/delete-goal/:id", auth, deleteGoal);
 

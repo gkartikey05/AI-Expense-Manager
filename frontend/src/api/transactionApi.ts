@@ -1,7 +1,7 @@
 import axiosInstance from "./axiosInstance";
 
 // make transaction
-type FormData = {
+type TransactionType = {
   description: string;
   amount: number;
   date: string;
@@ -9,7 +9,7 @@ type FormData = {
   type: string;
 };
 
-export const makeTransaction = async (formdata: FormData) => {
+export const makeTransaction = async (formdata: TransactionType) => {
   try {
     const { data } = await axiosInstance.post(
       "/transaction/make-transaction",
@@ -65,7 +65,7 @@ export const deleteTransaction = async (id: string) => {
 
 // update a transcation
 
-export const updateTransaction = async (formdata: FormData, id: string) => {
+export const updateTransaction = async (formdata: TransactionType, id: string) => {
   try {
     const { data } = await axiosInstance.put(
       `/transaction/update-transaction/${id}`,

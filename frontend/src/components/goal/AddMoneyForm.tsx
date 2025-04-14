@@ -12,7 +12,10 @@ import {
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { X } from "lucide-react";
+import { Loader, X } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addMoneyTogoal } from "@/api/goalApi";
+import toast from "react-hot-toast";
 
 // zod schema
 const formSchema = z.object({
@@ -27,24 +30,45 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const AddMoneyForm = ({
+  id,
   closeForm,
 }: {
+  id: number;
   closeForm: (value: boolean) => void;
 }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
+  const queryClient = useQueryClient();
+
+  // mutate - path (add money to goal)
+  const patchMutate = useMutation({
+    mutationFn: (data: { amount: number }) => addMoneyTogoal(id, data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["goals"] });
+      reset();
+      closeForm(false);
+      toast.success(data.message);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  // handle submit
   const onSubmit = (data: FormData) => {
     const finalData = {
       ...data,
       amount: Number(data.amount),
     };
     console.log("Amount Submitted:", finalData);
+    patchMutate.mutate(finalData);
   };
 
   return (
@@ -78,8 +102,16 @@ const AddMoneyForm = ({
             </div>
 
             {/* Submit */}
-            <Button type="submit" className="w-full mt-4">
-              Add Amount
+            <Button
+              type="submit"
+              disabled={patchMutate.isPending}
+              className="w-full mt-4 cursor-pointer"
+            >
+              {patchMutate.isPending ? (
+                <Loader className="size-4 animate-spin" />
+              ) : (
+                "Add Amount"
+              )}
             </Button>
           </form>
         </CardContent>
