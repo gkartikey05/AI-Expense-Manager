@@ -14,6 +14,7 @@ import { deleteBudget, getBudgets } from "@/api/budgetApi";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDataStore } from "@/store/userDataStore";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const Budget = () => {
   const [openBudgetForm, setOpenBudgetForm] = useState(false);
@@ -26,6 +27,8 @@ const Budget = () => {
     if (used === 0) return 0;
     return (used / amount) * 100;
   };
+
+  const { currency, formatNumber } = useCurrency();
 
   // query to get budget
   const { data, isPending, error, isError } = useQuery({
@@ -72,7 +75,7 @@ const Budget = () => {
             </CardHeader>
             <CardContent>
               <p className="text-3xl font-semibold">
-                Rs {financialData?.totalBudget.toFixed(2)}
+                {currency} {formatNumber(financialData?.totalBudget.toFixed(2))}
               </p>
             </CardContent>
             <CardFooter>
@@ -94,7 +97,8 @@ const Budget = () => {
             </CardHeader>
             <CardContent>
               <p className="text-3xl font-semibold">
-                Rs {financialData?.totalBudgetSpend.toFixed(2)}
+                {currency}{" "}
+                {formatNumber(financialData?.totalBudgetSpend.toFixed(2))}
               </p>
             </CardContent>
             <CardFooter>
@@ -115,11 +119,13 @@ const Budget = () => {
             </CardHeader>
             <CardContent>
               <p className="text-3xl font-semibold">
-                Rs{" "}
+                {currency}
                 {financialData &&
-                  (
-                    financialData.totalBudget - financialData.totalBudgetSpend
-                  ).toFixed(2)}
+                  formatNumber(
+                    (
+                      financialData.totalBudget - financialData.totalBudgetSpend
+                    ).toFixed(2)
+                  )}
               </p>
             </CardContent>
             <CardFooter>
@@ -189,7 +195,7 @@ const Budget = () => {
                 </div>
                 <div className="flex items-center justify-between text-gray-400 text-sm">
                   <p>
-                    Rs {budget.used} of Rs {budget.amount}
+                    {currency} {formatNumber(budget.used)} of {currency} {formatNumber(budget.amount)}
                   </p>
                   <p className="text-red-500">
                     {calculateUsedBudgetPercent(

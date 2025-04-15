@@ -1,4 +1,4 @@
-import { Loader,  Plus, Trash } from "lucide-react";
+import { Loader, Plus, Trash } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -14,6 +14,7 @@ import AddMoneyForm from "../goal/AddMoneyForm";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deletegoal, getgoals } from "@/api/goalApi";
 import toast from "react-hot-toast";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const Goals = () => {
   const [openGoalForm, setOpenGoalForm] = useState(false);
@@ -24,6 +25,8 @@ const Goals = () => {
   const goalSaved = (amount: number, saved: number): number => {
     return (saved / amount) * 100;
   };
+
+  const { currency, formatNumber } = useCurrency();
 
   const queryClient = useQueryClient();
 
@@ -101,7 +104,7 @@ const Goals = () => {
                 <CardContent>
                   {/* Target Amount */}
                   <p className="text-gray-500 mb-5">
-                    Target: Rs {goal.targetAmount}
+                    Target: {currency} {formatNumber(goal.targetAmount)}
                   </p>
 
                   {/* Progress Section */}
@@ -130,12 +133,12 @@ const Goals = () => {
                   <div className="mt-5 flex items-center justify-between">
                     <div>
                       <p className="text-gray-500">Saved</p>
-                      <p className="font-semibold">Rs {goal.savedAmount}</p>
+                      <p className="font-semibold">{currency} {formatNumber(goal.savedAmount)}</p>
                     </div>
                     <div>
                       <p className="text-gray-500">Remaining</p>
                       <p className="font-semibold">
-                        Rs {goal.targetAmount - goal.savedAmount}
+                        {currency} {formatNumber(goal.targetAmount - goal.savedAmount)}
                       </p>
                     </div>
                   </div>

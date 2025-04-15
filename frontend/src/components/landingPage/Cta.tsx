@@ -9,7 +9,7 @@ const Cta = () => {
         <h2 className="text-3xl font-bold text-gray-800 mb-4">
           Get Started with Fundly
         </h2>
-        <p className="text-lg text-gray-600 mb-6 max-w-md mx-auto ">
+        <p className="text-lg text-gray-600 mb-6 max-w-md ">
           Take control of your finances today. With Fundly, you can track your
           income, manage expenses, and make smarter decisions with easy-to-read
           reports.

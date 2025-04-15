@@ -6,11 +6,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import { useDataStore } from "@/store/userDataStore";
 import { TrendingDown, TrendingUp } from "lucide-react";
 
 const Overview = () => {
   const data = useDataStore((state) => state.data);
+
+  const { currency, formatNumber } = useCurrency();
 
   // Calculate % of budget used
   const calcPercentBudgetUsed = (
@@ -41,7 +44,7 @@ const Overview = () => {
         </CardHeader>
         <CardContent className="flex gap-2 items-end">
           <p className="text-2xl md:text-3xl  font-semibold">
-            Rs {data?.totalIncome}
+            {currency} {data && formatNumber(data?.totalIncome)}
           </p>
           <TrendingUp className="size-4 text-green-500" />
         </CardContent>
@@ -56,7 +59,7 @@ const Overview = () => {
         </CardHeader>
         <CardContent className="flex gap-2 items-end">
           <p className="text-2xl md:text-3xl  font-semibold">
-            Rs {data?.totalExpense}
+            {currency} {data && formatNumber(data?.totalExpense)}
           </p>
           <TrendingDown className="size-4 text-red-500" />
         </CardContent>
@@ -79,7 +82,7 @@ const Overview = () => {
             %
           </p>
           <span className="flex items-center text-green-500">
-            of RS {data?.totalBudget}
+            of {currency} {data && formatNumber(data?.totalBudget)}
           </span>
         </CardContent>
       </Card>
@@ -91,12 +94,12 @@ const Overview = () => {
             Saving Goals
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex gap-2 items-end text-nowrap">
+        <CardContent className="flex gap-2 items-end ">
           <p className="text-2xl md:text-3xl  font-semibold ">
-            Rs {data?.totalGoalAmountSaved}
+           {currency} {data && formatNumber(data?.totalGoalAmountSaved)}
           </p>
           <span className="flex items-center text-gray-500">
-            of RS {data?.totalGoalsAmount}
+            of {currency} {data && formatNumber(data?.totalGoalsAmount)}
           </span>
         </CardContent>
         <CardFooter className="flex flex-col items-start">

@@ -33,6 +33,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import { useDataStore } from "@/store/userDataStore";
 import {
   keepPreviousData,
@@ -55,6 +56,7 @@ const TransactionPage = () => {
   const queryClient = useQueryClient();
 
   const financeData = useDataStore((state) => state.data);
+  const { currency, formatNumber } = useCurrency();
 
   // query to get data
   const { data, isError, isPending, error } = useQuery({
@@ -213,8 +215,8 @@ const TransactionPage = () => {
                           : "text-green-500"
                       }`}
                     >
-                      {item.type === "EXPENSE" ? "-" : "+"} Rs{" "}
-                      {Math.abs(item.amount).toFixed(2)}
+                      {item.type === "EXPENSE" ? "-" : "+"} {currency}
+                      {formatNumber(Math.abs(item.amount).toFixed(2))}
                     </TableCell>
 
                     <TableCell>
@@ -305,7 +307,8 @@ const TransactionPage = () => {
               <CardTitle className="text-xl font-normal">Income</CardTitle>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-green-500">
-              +Rs {financeData && financeData?.totalIncome.toFixed(2)}
+              +{currency}{" "}
+              {financeData && formatNumber(financeData?.totalIncome.toFixed(2))}
             </CardContent>
             <CardFooter className="text-gray-500">Your Total income</CardFooter>
           </Card>
@@ -315,7 +318,9 @@ const TransactionPage = () => {
               <CardTitle className="text-xl font-normal">Expense</CardTitle>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-red-500">
-              -Rs {financeData && financeData?.totalExpense.toFixed(2)}
+              -{currency}{" "}
+              {financeData &&
+                formatNumber(financeData?.totalExpense.toFixed(2))}
             </CardContent>
             <CardFooter className="text-gray-500">
               Your Total Expense
@@ -327,9 +332,13 @@ const TransactionPage = () => {
               <CardTitle className="text-xl font-normal">Net Flow</CardTitle>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-green-500">
-              +Rs{" "}
+              +{currency}
               {financeData &&
-                (financeData.totalIncome - financeData.totalExpense).toFixed(2)}
+                formatNumber(
+                  (financeData.totalIncome - financeData.totalExpense).toFixed(
+                    2
+                  )
+                )}
             </CardContent>
 
             <CardFooter className="text-gray-500">Your net flow</CardFooter>

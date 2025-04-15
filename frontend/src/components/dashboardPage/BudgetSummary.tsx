@@ -3,12 +3,15 @@ import { Link } from "react-router-dom";
 import { Progress } from "../ui/progress";
 import { useQuery } from "@tanstack/react-query";
 import { getBudgets } from "@/api/budgetApi";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const BudgetSummary = () => {
   // percentage budget used
   const calculateUsedBudgetPercent = (amount: number, used: number): number => {
     return (used / amount) * 100;
   };
+
+  const { currency, formatNumber } = useCurrency();
 
   // get budgets
   const { data } = useQuery({
@@ -32,7 +35,7 @@ const BudgetSummary = () => {
             <p className="text-lg font-semibold">{budget.category}</p>
             <div className="flex items-center justify-between text-gray-400 text-sm">
               <p>
-                Rs {budget.used} of Rs {budget.amount}
+                {currency} {formatNumber(budget.used)} of {currency} {formatNumber(budget.amount)}
               </p>
               <p className="text-red-500">
                 {calculateUsedBudgetPercent(budget.amount, budget.used).toFixed(

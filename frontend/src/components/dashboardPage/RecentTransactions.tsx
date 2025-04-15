@@ -13,6 +13,7 @@ import TransactionForm from "../transaction/TransactionForm";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getTransaction } from "@/api/transactionApi";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 // const mockTransactions = [
 //   {
@@ -62,6 +63,8 @@ const RecentTransactions = () => {
     refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
+
+  const { currency, formatNumber } = useCurrency();
 
   return (
     <>
@@ -114,8 +117,8 @@ const RecentTransactions = () => {
                         : "text-green-500"
                     }`}
                   >
-                    {item.type === "EXPENSE" ? "-" : "+"} Rs{" "}
-                    {Math.abs(item.amount).toFixed(2)}
+                    {item.type === "EXPENSE" ? "-" : "+"} {currency}
+                    {formatNumber(Math.abs(item.amount).toFixed(2))}
                   </TableCell>
                 </TableRow>
               ))}
