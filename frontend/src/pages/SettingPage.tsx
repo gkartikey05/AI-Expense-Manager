@@ -1,6 +1,5 @@
 import DashboardHeader from "@/components/DashboardHeader";
 import HelpSupportSection from "@/components/settings/Help&Support";
-import HelpAndSupport from "@/components/settings/Help&Support";
 import Preferences from "@/components/settings/Preferences";
 import Profile from "@/components/settings/Profile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
