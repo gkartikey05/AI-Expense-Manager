@@ -6,7 +6,7 @@ const Navbar = ({ isAuth = false }: { isAuth: boolean }) => {
   const navigate = useNavigate();
 
   return (
-    <header className="py-4 px-5 md:px-8 lg:px-10  fixed top-0 left-0 right-0 bg-gray-50 backdrop-blur-sm z-50">
+    <header className="py-4 px-5 md:px-8 lg:px-10  fixed top-0 left-0 right-0 backdrop-blur-sm z-50">
       <nav className="max-w-7xl mx-auto flex items-center justify-between">
         {/* logo */}
         <Link to="/" className="flex items-center gap-2">
