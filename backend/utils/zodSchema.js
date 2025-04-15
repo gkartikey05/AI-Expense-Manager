@@ -31,7 +31,16 @@ const transactionSchema = z.object({
   category: z.string().trim().nonempty("Category is required"),
   amount: z.number().positive("Amount must be a positive number").min(1),
   type: z.string().toUpperCase().nonempty("Type is required"),
-  date: z.date({ required_error: "Date is required" }),
+  date: z.preprocess((val) => {
+    if (!val) return undefined;
+
+    try {
+      const date = new Date(val);
+      return isNaN(date.getTime()) ? undefined : date;
+    } catch (error) {
+      return undefined;
+    }
+  }, z.date()),
 });
 
 // budget schema
@@ -45,15 +54,19 @@ const goalSchema = z.object({
   goalName: z.string().nonempty("Goal name is required"),
   targetAmount: z.number().positive("Target amount is required"),
   savedAmount: z.number().nonnegative("Saved amount is required"),
-  date: z.date().optional(),
+  date: z.preprocess((val) => {
+    if (!val) return undefined;
+
+    try {
+      const date = new Date(val);
+      return isNaN(date.getTime()) ? undefined : date;
+    } catch (error) {
+      return undefined;
+    }
+  }, z.date().optional()),
 });
 
-//update goal schema
-const updateGoalSchema = z.object({
-  targetAmount: z.number().positive("Target amount is required"),
-  savedAmount: z.number().nonnegative("Saved amount is required"),
-  targetDate: z.date().optional(),
-});
+
 
 module.exports = {
   registerSchema,
@@ -62,5 +75,4 @@ module.exports = {
   transactionSchema,
   budgetSchema,
   goalSchema,
-  updateGoalSchema,
 };

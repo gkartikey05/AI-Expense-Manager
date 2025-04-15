@@ -10,6 +10,7 @@ type TransactionType = {
 };
 
 export const makeTransaction = async (formdata: TransactionType) => {
+  console.log("form data:",formdata)
   try {
     const { data } = await axiosInstance.post(
       "/transaction/make-transaction",
