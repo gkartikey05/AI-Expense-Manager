@@ -196,7 +196,7 @@ const getAllTransaction = async (req, res) => {
       where: filterObject,
     });
 
-    if (!transactions.length) {
+    if (transactions.length===0) {
       return res.status(200).json({
         success: true,
         message: "No transactions found!",

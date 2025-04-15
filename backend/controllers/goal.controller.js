@@ -106,6 +106,14 @@ const getAllGoals = async (req, res) => {
       },
     });
 
+    if (goals.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No goals found",
+        goals,
+      });
+    }
+
     return res.status(200).json({
       success: true,
       message: "Fetched all goals successfully.",
