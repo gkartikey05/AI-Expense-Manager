@@ -4,7 +4,7 @@ import axiosInstance from "./axiosInstance";
 type TransactionType = {
   description: string;
   amount: number;
-  date: string;
+  date: Date;
   category: string;
   type: string;
 };

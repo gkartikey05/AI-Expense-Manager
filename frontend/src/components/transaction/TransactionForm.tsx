@@ -79,7 +79,7 @@ type FormData = z.infer<typeof formSchema>;
 type TransactionData = {
   description: string;
   amount: number;
-  date: string;
+  date:Date;
   category: string;
   type: string;
 };
@@ -89,7 +89,7 @@ type UpdateTransaction = {
   id: string;
   description: string;
   amount: string;
-  date: string;
+  date: Date;
   category: string;
   type: string;
 };
@@ -165,7 +165,7 @@ const TransactionForm = ({
     const finalData = {
       ...data,
       amount: Number(data.amount),
-      date: String(data.date),
+      date: data.date,
       type: transactionType,
     };
     console.log("final data:", finalData);

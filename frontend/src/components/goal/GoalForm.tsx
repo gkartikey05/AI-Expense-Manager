@@ -65,7 +65,7 @@ const GoalForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
     goalName: string;
     targetAmount: number;
     savedAmount: number;
-    targetDate?: string;
+    targetDate?: Date;
   };
   const mutation = useMutation({
     mutationFn: (data: GoalType) => addGoal(data),
@@ -86,7 +86,7 @@ const GoalForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
       ...data,
       targetAmount: Number(data.targetAmount),
       savedAmount: Number(data.savedAmount),
-      targetDate: String(data.targetDate),
+      targetDate: data.targetDate,
     };
     console.log("Goal Submitted:", finalData);
     mutation.mutate(finalData);

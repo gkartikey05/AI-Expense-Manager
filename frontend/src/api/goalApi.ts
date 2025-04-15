@@ -6,7 +6,7 @@ type GoalType = {
   goalName: string;
   targetAmount: number;
   savedAmount: number;
-  targetDate?: string;
+  targetDate?: Date;
 };
 
 export const addGoal = async (formData: GoalType) => {
