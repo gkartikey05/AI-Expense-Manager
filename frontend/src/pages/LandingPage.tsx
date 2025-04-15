@@ -27,6 +27,8 @@ const LandingPage = () => {
         if (user) {
           setUser(user);
           navigate("/dashboard");
+        }else{
+          navigate("/");
         }
       } catch (err) {
         console.log("User not logged in:", err);
