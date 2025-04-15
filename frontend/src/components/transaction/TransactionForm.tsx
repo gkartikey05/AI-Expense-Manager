@@ -143,7 +143,12 @@ const TransactionForm = ({
       toast.success(data.message);
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
       queryClient.invalidateQueries({ queryKey: ["budgets"], exact: true });
-      queryClient.invalidateQueries({ queryKey: ["financialData"], exact: true });
+      queryClient.invalidateQueries({
+        queryKey: ["financialData"],
+        exact: true,
+      });
+      queryClient.invalidateQueries({ queryKey: ["recentTransaction"] });
+      queryClient.invalidateQueries({ queryKey: ["categoryBreakdown"] });
       if (typeof setTransactionDataToNull === "function") {
         setTransactionDataToNull(null);
       }

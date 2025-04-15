@@ -4,6 +4,7 @@ const {
   updateUserData,
   getUserData,
   getAggregatedData,
+  getCategoryBreakdown,
 } = require("../controllers/user.controller");
 
 const express = require("express");
@@ -17,5 +18,7 @@ userRouter
 userRouter.route("/get-user").get(auth, getUserData);
 
 userRouter.route("/get-data").get(auth, getAggregatedData);
+
+userRouter.route("/category-breakdown").get(auth, getCategoryBreakdown);
 
 module.exports = userRouter;

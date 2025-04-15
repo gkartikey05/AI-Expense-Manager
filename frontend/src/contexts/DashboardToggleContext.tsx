@@ -14,7 +14,7 @@ export const DashboardToggleProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   return (
     <DashboardToggleContext.Provider

@@ -1,40 +1,20 @@
 import { MoveRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Progress } from "../ui/progress";
-
-const budgets = [
-  {
-    category: "Housing",
-    amount: 5000,
-    used: 3600,
-  },
-  {
-    category: "Food",
-    amount: 1500,
-    used: 1250,
-  },
-  {
-    category: "Transportation",
-    amount: 800,
-    used: 600,
-  },
-  {
-    category: "Utilities",
-    amount: 400,
-    used: 300,
-  },
-  {
-    category: "Entertainment",
-    amount: 1000,
-    used: 450,
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getBudgets } from "@/api/budgetApi";
 
 const BudgetSummary = () => {
   // percentage budget used
   const calculateUsedBudgetPercent = (amount: number, used: number): number => {
     return (used / amount) * 100;
   };
+
+  // get budgets
+  const { data } = useQuery({
+    queryKey: ["budgetSummary"],
+    queryFn: getBudgets,
+  });
 
   return (
     <div className="border border-black/20 p-4 rounded-md">
@@ -47,7 +27,7 @@ const BudgetSummary = () => {
       <p className="text-gray-500">Your monthly budget summary</p>
 
       <div className="space-y-4 mt-5">
-        {budgets.map((budget) => (
+        {data?.map((budget: any) => (
           <div key={budget.category} className="space-y-2">
             <p className="text-lg font-semibold">{budget.category}</p>
             <div className="flex items-center justify-between text-gray-400 text-sm">

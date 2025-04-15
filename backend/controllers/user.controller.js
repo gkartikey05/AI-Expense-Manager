@@ -181,14 +181,14 @@ const getAggregatedData = async (req, res) => {
 
     // Final financial data (convert to float for returning)
     const data = {
-      totalIncome: parseFloat(totalIncome._sum.amount || "0"), 
-      totalExpense: parseFloat(totalExpense._sum.amount || "0"), 
-      totalBudget: parseFloat(totalBudget._sum.amount || "0"), 
+      totalIncome: parseFloat(totalIncome._sum.amount || "0"),
+      totalExpense: parseFloat(totalExpense._sum.amount || "0"),
+      totalBudget: parseFloat(totalBudget._sum.amount || "0"),
       totalBudgetSpend: totalBudgetSpend,
-      totalGoalsAmount: parseFloat(totalGoalsAmount._sum.targetAmount || "0"), 
+      totalGoalsAmount: parseFloat(totalGoalsAmount._sum.targetAmount || "0"),
       totalGoalAmountSaved: parseFloat(
         totalGoalAmountSaved._sum.savedAmount || "0"
-      ), 
+      ),
     };
 
     return res.status(200).json({
@@ -205,8 +205,62 @@ const getAggregatedData = async (req, res) => {
   }
 };
 
+// ---------------get a user category breakdown for charts---------------
+const getCategoryBreakdown = async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    // Get income category breakdown
+    const income = await prisma.transaction.groupBy({
+      by: ["category"],
+      where: {
+        userId,
+        type: "INCOME",
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    // Get expense category breakdown
+    const expense = await prisma.transaction.groupBy({
+      by: ["category"],
+      where: {
+        userId,
+        type: "EXPENSE",
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    const incomeBreakdown = income.map((item) => ({
+      name: item.category,
+      value: Number(item._sum.amount ?? 0),
+    }));
+
+    const expenseBreakdown = expense.map((item) => ({
+      name: item.category,
+      value: Number(item._sum.amount ?? 0),
+    }));
+
+    return res.status(200).json({
+      success: true,
+      incomeBreakdown,
+      expenseBreakdown,
+    });
+  } catch (err) {
+    console.error("Error fetching category breakdown:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+
 module.exports = {
   updateUserData,
   getUserData,
   getAggregatedData,
+  getCategoryBreakdown,
 };

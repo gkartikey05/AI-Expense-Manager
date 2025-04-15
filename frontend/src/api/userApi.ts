@@ -53,3 +53,17 @@ export const getData = async () => {
     throw new Error(message);
   }
 };
+
+// get user category breakdown
+export const getCategoryBreakdown = async () => {
+  try {
+    const { data } = await axiosInstance.get("/user/category-breakdown");
+    if (data.success) {
+      return data;
+    }
+    throw new Error("Failed to fetch data");
+  } catch (err: any) {
+    const message = err.response?.data?.message || "Failed to fetch Data";
+    throw new Error(message);
+  }
+};

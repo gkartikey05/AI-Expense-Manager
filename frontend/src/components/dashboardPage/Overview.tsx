@@ -91,8 +91,8 @@ const Overview = () => {
             Saving Goals
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex gap-2 items-end">
-          <p className="text-2xl md:text-3xl  font-semibold">
+        <CardContent className="flex gap-2 items-end text-nowrap">
+          <p className="text-2xl md:text-3xl  font-semibold ">
             Rs {data?.totalGoalAmountSaved}
           </p>
           <span className="flex items-center text-gray-500">

@@ -1,120 +1,106 @@
+import { getCategoryBreakdown } from "@/api/userApi";
+import { useQuery } from "@tanstack/react-query";
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  ReferenceLine,
-} from "recharts";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-const data = [
-  { name: "Monday", income: 100 },
-  { name: "Tuesday", income: 80 },
-  { name: "Wednesday", income: 500 },
-  { name: "Thursday", income: 150 },
-  { name: "Friday", income: 200 },
-  { name: "Saturday", income: 300 },
-  { name: "Sunday", income: 120 },
-];
-
-// const onChange = () => {};
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { PieChart, Pie, Tooltip, Cell } from "recharts";
 
 const IncomeExpenceGraph = () => {
+  // colors for graph
+  const COLORS = [
+    "#4f46e5",
+    "#22c55e",
+    "#f97316",
+    "#ef4444",
+    "#06b6d4",
+    "#8b5cf6",
+  ];
+
+  // query category breakdown
+  const { data } = useQuery({
+    queryKey: ["categoryBreakdown"],
+    queryFn: getCategoryBreakdown,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+  });
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-      {/* income graph */}
-      <div className="border border-black/20 p-4 rounded-md">
-        <div className="flex items-center gap-5 justify-between">
-          <h1 className="text-2xl">Income</h1>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="View Income" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="daily">Daily</SelectItem>
-              <SelectItem value="weekly">Weekly</SelectItem>
-              <SelectItem value="monthly">Monthly</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <p className="text-gray-500">Your overall income</p>
+      {/* income donut graph*/}
+      <Card className="shadow-none">
+        <CardHeader>
+          <CardTitle className="text-2xl font-normal">Income</CardTitle>
+          <CardDescription className="text-gray-500">
+            Your income category breakdown
+          </CardDescription>
+        </CardHeader>
 
-        <div className="h-[400px] mt-5">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={data}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        <CardContent className=" flex items-center justify-center">
+          {/* graph here  */}
+          <PieChart width={400} height={400}>
+            <Pie
+              data={data?.incomeBreakdown}
+              cx="50%"
+              cy="50%"
+              innerRadius={60} // 👈 makes it a donut
+              outerRadius={100}
+              fill="#8884d8"
+              paddingAngle={5}
+              dataKey="value"
+              label
             >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis domain={[0, "dataMax + 50"]} />
-              <Tooltip formatter={(value) => `₹${value}`} />
-              <Legend />
-              <ReferenceLine y={100} stroke="#f87171" strokeDasharray="3 3" />
-              <Line
-                type="monotone"
-                dataKey="income"
-                stroke="#4ade80"
-                name="Income"
-                dot={{ r: 4 }}
-                activeDot={{ r: 6 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+              {data?.incomeBreakdown.map((_:any, index: any) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </CardContent>
+      </Card>
 
-      {/* expense graph */}
-      <div className="border border-black/20 p-4 rounded-md">
-        <div className="flex items-center gap-5 justify-between">
-          <h1 className="text-2xl">Expense</h1>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="View Income" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="daily">Daily</SelectItem>
-              <SelectItem value="weekly">Weekly</SelectItem>
-              <SelectItem value="monthly">Monthly</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <p className="text-gray-500">Your overall Expense</p>
+      {/* expense donut graph*/}
+      <Card className="shadow-none">
+        <CardHeader>
+          <CardTitle className="text-2xl font-normal">Expense</CardTitle>
+          <CardDescription className="text-gray-500">
+            Your expense category breakdown
+          </CardDescription>
+        </CardHeader>
 
-        <div className="h-[400px] mt-5">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={data}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        <CardContent className="flex items-center justify-center">
+          {/* graph here  */}
+          <PieChart width={400} height={400}>
+            <Pie
+              data={data?.expenseBreakdown}
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={100}
+              fill="#8884d8"
+              paddingAngle={5}
+              dataKey="value"
+              label
             >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis domain={[0, "dataMax + 50"]} />
-              <Tooltip formatter={(value) => `₹${value}`} />
-              <Legend />
-              <ReferenceLine y={100} stroke="#f87171" strokeDasharray="3 3" />
-              <Line
-                type="monotone"
-                dataKey="income"
-                stroke="#4ade80"
-                name="Income"
-                dot={{ r: 4 }}
-                activeDot={{ r: 6 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+              {data?.expenseBreakdown.map((_: any, index: any) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </CardContent>
+      </Card>
     </div>
   );
 };

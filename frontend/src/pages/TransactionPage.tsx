@@ -62,7 +62,7 @@ const TransactionPage = () => {
     queryFn: () => getTransaction(filter, sort, search, page),
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
-    refetchOnMount: false,
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
     placeholderData: keepPreviousData,
   });
@@ -77,6 +77,7 @@ const TransactionPage = () => {
       queryClient.invalidateQueries({
         queryKey: ["financialData"],
       });
+      queryClient.invalidateQueries({ queryKey: ["categoryBreakdown"] });
       toast.success(data?.message);
     },
     onError: (error) => {
