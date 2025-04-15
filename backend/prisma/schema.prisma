@@ -27,7 +27,7 @@ model Transaction {
   id          String          @id @default(uuid())
   description String
   category    String
-  date        String
+  date        DateTime
   amount      Decimal
   type        TransactionType
   userId      String
@@ -58,7 +58,7 @@ model Goal {
   goalName     String
   targetAmount Decimal
   savedAmount  Decimal
-  targetDate   String?
+  targetDate   DateTime?
   userId       String
   user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 

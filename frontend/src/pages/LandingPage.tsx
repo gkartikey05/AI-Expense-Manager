@@ -35,9 +35,9 @@ const LandingPage = () => {
     <section className="hide-scrollbar overflow-auto h-screen">
       <Navbar isAuth={false} />
       {/* hero section */}
-      <main className="min-h-screen flex items-center justify-center ">
+      <main className="min-h-screen flex items-center justify-center">
         <section className="max-w-3xl mx-auto text-center px-4 sm:px-6">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 mb-5 leading-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-gray-900 mb-5 leading-tight">
             Welcome to Fundly
           </h1>
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 mb-8 leading-relaxed">
