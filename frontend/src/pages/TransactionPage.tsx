@@ -59,7 +59,7 @@ const TransactionPage = () => {
   const { currency, formatNumber } = useCurrency();
 
   // query to get data
-  const { data, isError, isPending, error } = useQuery({
+  const { data, isError, isFetching, error } = useQuery({
     queryKey: ["transactions", filter, sort, search, page],
     queryFn: () => getTransaction(filter, sort, search, page),
     staleTime: 1000 * 60 * 5,
@@ -162,7 +162,7 @@ const TransactionPage = () => {
           {/* search ,sort ,filter ends */}
 
           {/* loder */}
-          {isPending && (
+          {isFetching && (
             <div className="h-32 flex items-center justify-center">
               <Loader className="size-8 text-gray-600 animate-spin" />
             </div>
