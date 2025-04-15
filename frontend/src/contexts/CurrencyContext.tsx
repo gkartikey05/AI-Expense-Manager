@@ -9,7 +9,7 @@ import {
 type CurrencyContextType = {
   currency: string;
   changeCurrency: (symbol: string) => void;
-  formatNumber: (num: number | string | undefined) => string;
+  formatNumber: any
 };
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(

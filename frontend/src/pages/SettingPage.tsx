@@ -1,4 +1,5 @@
 import DashboardHeader from "@/components/DashboardHeader";
+import HelpSupportSection from "@/components/settings/Help&Support";
 import HelpAndSupport from "@/components/settings/Help&Support";
 import Preferences from "@/components/settings/Preferences";
 import Profile from "@/components/settings/Profile";
@@ -47,7 +48,7 @@ const SettingPage = () => {
             <Preferences />
           </TabsContent>
           <TabsContent value="help & support">
-            <HelpAndSupport />
+            <HelpSupportSection />
           </TabsContent>
         </Tabs>
       </section>
