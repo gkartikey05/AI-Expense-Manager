@@ -14,7 +14,7 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, X } from "lucide-react";
+import { Calendar as CalendarIcon, Loader, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -310,8 +310,8 @@ const TransactionForm = ({
             </div>
 
             {/* Submit */}
-            <Button type="submit" className="w-full mt-4 cursor-pointer">
-              {transactionData ? "Save Updates" : "Add Transaction"}
+            <Button type="submit" disabled={mutation.isPending} className="w-full mt-4 cursor-pointer">
+              {mutation.isPending ?<Loader className="size-4 animate-spin"/>:transactionData ? "Save Updates" : "Add Transaction"}
             </Button>
           </form>
         </CardContent>
