@@ -9,6 +9,7 @@ const userRouter = require("./routes/user.routes");
 const transactionRouter = require("./routes/transaction.route");
 const budgetRouter = require("./routes/budget.routes");
 const goalRouter = require("./routes/goal.routes");
+const aiRouter = require("./routes/aiAnalytics.router");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -32,6 +33,7 @@ app.use("/api/user", userRouter);
 app.use("/api/transaction", transactionRouter);
 app.use("/api/budget", budgetRouter);
 app.use("/api/goal", goalRouter);
+app.use("/api/ai", aiRouter);
 
 // listen to server
 app.listen(PORT, () => {
