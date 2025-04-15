@@ -33,7 +33,7 @@ const navItems = [
     icon: <PiggyBank className="h-5 w-5" />,
   },
   {
-    title: "Insights & Reports",
+    title: "Ai Analysis",
     href: "insights",
     icon: <LineChart className="h-5 w-5" />,
   },
