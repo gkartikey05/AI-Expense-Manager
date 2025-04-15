@@ -3,6 +3,7 @@ import laptop from "./laptop.png";
 import phone from "./mobile.png";
 import tablet from "./tablet.png";
 import transaction from "./transaction.jpg";
+import logo from "./logo.png";
 
 export const assets = {
   home,
@@ -10,4 +11,5 @@ export const assets = {
   tablet,
   phone,
   transaction,
+  logo,
 };

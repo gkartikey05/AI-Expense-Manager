@@ -1,5 +1,4 @@
 import {
-  DollarSign,
   LayoutDashboard,
   LineChart,
   LogOut,
@@ -15,6 +14,7 @@ import { useUserStore } from "@/store/userStore";
 import { logoutUser } from "@/api/userAuth";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { assets } from "@/assets/assets";
 
 const navItems = [
   {
@@ -74,8 +74,12 @@ const Sidebar = () => {
         {/* Logo (visible only when sidebar is open) */}
         {isSidebarOpen && (
           <div className="flex items-center gap-2">
-            <div className="p-1 border border-black rounded-full">
-              <DollarSign className="w-4 h-4 text-black" />
+            <div className="size-16 rounded-full">
+              <img
+                src={assets.logo}
+                alt="logo"
+                className="size-full object-cover"
+              />
             </div>
             <h1 className="text-xl md:text-2xl font-bold text-gray-800">
               Fundly
