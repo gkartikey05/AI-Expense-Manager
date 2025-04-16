@@ -15,6 +15,8 @@ const addGoal = async (req, res) => {
       });
     }
 
+    console.log("goal data:",result.data)
+
     const { goalName } = result.data;
 
     const exists = await prisma.goal.findFirst({
