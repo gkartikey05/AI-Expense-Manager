@@ -71,19 +71,22 @@ const LandingPage = () => {
             </Button>
           </div>
           {/* feature overview */}
-          <ul className="w-full max-w-6xl mx-auto  grid grid-cols-2  md:grid-cols-4 gap-5 mt-5 absolute bottom-10 left-1/2 -translate-x-1/2 text-nowrap px-4">
-            <li className="border border-black/20 rounded-sm px-5 py-2 flex items-center gap-2 text-gray-700">
-              <BanknoteArrowUp className="size-5 text-blue-500" /> Track
-              Transactions
+          <ul className="w-full max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 px-4 mt-5 absolute bottom-10 left-1/2 -translate-x-1/2 text-nowrap">
+            <li className="flex items-center gap-2  px-1 sm:px-5 py-2 border border-black/20 rounded-sm text-gray-700 bg-white">
+              <BanknoteArrowUp className="w-5 h-5 shrink-0 text-blue-500" />
+              <span>Track Transactions</span>
             </li>
-            <li className="border border-black/20 rounded-sm px-5 py-2 flex items-center gap-2 text-gray-700">
-              <DollarSign className="size-5 text-green-500" /> Set Budgets
+            <li className="flex items-center gap-2 px-1 sm:px-5 py-2 border border-black/20 rounded-sm text-gray-700 bg-white">
+              <DollarSign className="w-5 h-5 shrink-0 text-green-500" />
+              <span>Set Budgets</span>
             </li>
-            <li className="border border-black/20 rounded-sm px-5 py-2 flex items-center gap-2 text-gray-700">
-              <Target className="size-5 text-orange-500" /> Set Goals
+            <li className="flex items-center gap-2 px-1 sm:px-5 py-2 border border-black/20 rounded-sm text-gray-700 bg-white">
+              <Target className="w-5 h-5 shrink-0 text-orange-500" />
+              <span>Set Goals</span>
             </li>
-            <li className="border border-black/20 rounded-sm px-5 py-2 flex items-center gap-2 text-gray-700">
-              <BarChart2 className="size-5 text-purple-500" /> Get AI Insight
+            <li className="flex items-center gap-2 px-1 sm:px-5 py-2 border border-black/20 rounded-sm text-gray-700 bg-white">
+              <BarChart2 className="w-5 h-5 shrink-0 text-purple-500" />
+              <span>Get AI Insight</span>
             </li>
           </ul>
         </section>
