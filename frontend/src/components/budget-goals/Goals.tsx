@@ -146,7 +146,7 @@ const Goals = () => {
                   {/* Target Date */}
                   <p className="mt-5">
                     Target date:{" "}
-                    {goal.targetDate !== "undefined"
+                    {goal.targetDate
                       ? new Date(goal.targetDate)
                           .toLocaleDateString("en-US", {
                             month: "long",
