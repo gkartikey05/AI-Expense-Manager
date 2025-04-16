@@ -88,7 +88,6 @@ const GoalForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
       savedAmount: Number(data.savedAmount),
       targetDate: data.targetDate,
     };
-    console.log("Goal Submitted:", finalData);
     mutation.mutate(finalData);
   };
 

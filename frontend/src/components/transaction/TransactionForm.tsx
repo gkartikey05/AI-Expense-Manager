@@ -168,7 +168,6 @@ const TransactionForm = ({
       date: data.date,
       type: transactionType,
     };
-    console.log("final data:", finalData);
     mutation.mutate(finalData, {
       onSuccess: () => {
         reset();

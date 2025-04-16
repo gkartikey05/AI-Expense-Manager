@@ -110,7 +110,6 @@ const BudgetForm = ({
       ...data,
       amount: Number(data.amount),
     };
-    console.log("Budget Submitted:", finalData);
     mutation.mutate(finalData);
   };
 

@@ -68,7 +68,6 @@ const AddMoneyForm = ({
       ...data,
       amount: Number(data.amount),
     };
-    console.log("Amount Submitted:", finalData);
     patchMutate.mutate(finalData);
   };
 

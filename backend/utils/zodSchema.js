@@ -25,7 +25,7 @@ const userSchema = z.object({
     .optional(),
 });
 
-// transaction type
+// transaction schema
 const transactionSchema = z.object({
   description: z.string().trim().nonempty("Description is required"),
   category: z.string().trim().nonempty("Category is required"),
