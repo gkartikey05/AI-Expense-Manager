@@ -75,7 +75,7 @@ const Budget = () => {
             </CardHeader>
             <CardContent>
               <p className="text-3xl font-semibold">
-                {currency} {formatNumber(financialData?.totalBudget.toFixed(2))}
+                {currency} { financialData?.totalBudget && formatNumber(financialData.totalBudget.toFixed(2))}
               </p>
             </CardContent>
             <CardFooter>
@@ -98,7 +98,7 @@ const Budget = () => {
             <CardContent>
               <p className="text-3xl font-semibold">
                 {currency}{" "}
-                {formatNumber(financialData?.totalBudgetSpend.toFixed(2))}
+                {financialData?.totalBudgetSpend && formatNumber(financialData.totalBudgetSpend.toFixed(2))}
               </p>
             </CardContent>
             <CardFooter>
