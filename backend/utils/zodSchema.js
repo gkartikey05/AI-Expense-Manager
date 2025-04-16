@@ -54,7 +54,7 @@ const goalSchema = z.object({
   goalName: z.string().nonempty("Goal name is required"),
   targetAmount: z.number().positive("Target amount is required"),
   savedAmount: z.number().nonnegative("Saved amount is required"),
-  date: z.preprocess((val) => {
+  targetDate: z.preprocess((val) => {
     if (!val) return undefined;
 
     try {
