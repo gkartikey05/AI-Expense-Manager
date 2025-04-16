@@ -36,9 +36,9 @@ const getAiAnalytics = async (req, res) => {
       
       User data:
       - Name: ${userData.fullName}
-      - Transactions count: ${userData.transactions.length}
-      - Budgets count: ${userData.budgets.length}
-      - Goals count: ${userData.goals.length}
+      - Transactions details: ${userData.transactions}
+      - Budgets details: ${userData.budgets}
+      - Goals details: ${userData.goals}
       
       Use only the provided data to infer insights. If there’s insufficient data, mention that clearly in the relevant fields.
       `,
