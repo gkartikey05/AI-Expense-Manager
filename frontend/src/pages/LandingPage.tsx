@@ -27,7 +27,7 @@ const LandingPage = () => {
         if (user) {
           setUser(user);
           navigate("/dashboard");
-        }else{
+        } else {
           navigate("/");
         }
       } catch (err) {
@@ -39,7 +39,7 @@ const LandingPage = () => {
   }, [setUser, navigate]);
 
   return (
-    <section className="hide-scrollbar overflow-auto h-screen">
+    <section className="hide-scrollbar overflow-auto h-[100dvh]">
       <Navbar isAuth={false} />
       {/* hero section */}
       <main className="min-h-screen flex items-center justify-center relative">
