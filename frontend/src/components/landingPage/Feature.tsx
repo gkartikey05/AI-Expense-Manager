@@ -1,4 +1,5 @@
 import { ReceiptText, Wallet, Target, BarChart3 } from "lucide-react";
+import { motion } from "framer-motion";
 
 const features = [
   {
@@ -29,7 +30,13 @@ const features = [
 
 export default function Feature() {
   return (
-    <div className="bg-white py-18 sm:py-24">
+    <motion.div
+      className="bg-white py-18 sm:py-24"
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base/7 font-semibold text-indigo-600">
@@ -39,16 +46,27 @@ export default function Feature() {
             Everything you need to Manage your Finance
           </p>
           <p className="mt-6 text-lg/8 text-gray-600">
-            With Fundly, managing your finances becomes effortless.Get a clear view of where your
-            money goes, and make smarter decisions with easy-to-understand
-            reports and budgeting tools, all tailored to help you take control
-            of your financial journey.
+            With Fundly, managing your finances becomes effortless.Get a clear
+            view of where your money goes, and make smarter decisions with
+            easy-to-understand reports and budgeting tools, all tailored to help
+            you take control of your financial journey.
           </p>
         </div>
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
           <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-            {features.map((feature) => (
-              <div key={feature.name} className="relative pl-16">
+            {features.map((feature, idx) => (
+              <motion.div
+                key={feature.name}
+                className="relative pl-16"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{
+                  duration: 0.5,
+                  delay: idx * 0.12,
+                  ease: "easeOut",
+                }}
+              >
                 <dt className="text-base/7 font-semibold text-gray-900">
                   <div className="absolute top-0 left-0 flex size-10 items-center justify-center rounded-lg bg-indigo-600">
                     <feature.icon
@@ -61,11 +79,11 @@ export default function Feature() {
                 <dd className="mt-2 text-base/7 text-gray-600">
                   {feature.description}
                 </dd>
-              </div>
+              </motion.div>
             ))}
           </dl>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
