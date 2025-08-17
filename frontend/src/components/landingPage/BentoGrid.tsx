@@ -1,8 +1,15 @@
 import { assets } from "@/assets/assets";
+import { motion } from "framer-motion";
 
 const BentoGrid = () => {
   return (
-    <div className="py-18 sm:py-24 px-4 sm:px-6">
+    <motion.div
+      className="py-18 sm:py-24 px-4 sm:px-6"
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+    >
       <h1 className="text-center text-3xl md:text-4xl lg:text-5xl font-semibold">
         Use Anywhere
       </h1>
@@ -24,7 +31,7 @@ const BentoGrid = () => {
           <img src={assets.tablet} alt="Tablet" className="w-full h-auto" />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
