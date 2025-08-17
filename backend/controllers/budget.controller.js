@@ -82,7 +82,7 @@ const updateBudget = async (req, res) => {
     if (!existing) {
       return res.status(404).json({
         success: false,
-        message: "Budget not found for this category",
+        message: "Budget not found for this category"
       });
     }
 
