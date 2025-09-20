@@ -19,7 +19,7 @@ const getAiAnalytics = async (req, res) => {
 
     // Prepare content to be passed to Gemini, structured in a way that can be processed into JSON
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash",
       contents: `
       You are a helpful and concise financial assistant. Analyze the user's financial data and respond ONLY with a valid JSON object. Do NOT include markdown, comments, or extra explanations and provide personal touch to the user , like you areb directly talking to him.
       
@@ -57,3 +57,57 @@ const getAiAnalytics = async (req, res) => {
 };
 
 module.exports = getAiAnalytics;
+
+
+
+
+const handlePrompt = async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    console.log("message:", message)
+
+    if (!message || message.trim() === "") {
+      return res.status(400).json({ error: "Message is required" });
+    }
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: message,
+      config: {
+        systemInstruction: `
+          You are "Fundly" - a fun and friendly financial advisor chatbot.
+
+          Your job:
+          - Answer ONLY finance-related queries (financial advices,personal finance, budgeting, investing, savings, expenses, goals).
+          - Keep the tone light, simple, and approachable (like chatting with a friendly buddy).
+          - Always include a small disclaimer: 
+            "This is not professional financial advice. Please consult a licensed advisor before making financial decisions."
+
+           Do NOT:
+          - Answer questions about code, programming, technology, movies, celebrities, history, or any unrelated topics.
+          - Generate unrelated content.
+          
+          If the user asks something outside of finance, respond in a friendly way like:
+          "Hey! I am your financial buddy , I can only help with money matters. Try asking me about savings, budgeting, or investing!"
+        `,
+      },
+    });
+
+    const reply = response?.text || "Sorry, I couldn not generate a response.";
+
+    res.json({ reply });
+  } catch (err) {
+    console.error("Gemini API Error:", err);
+
+    if (err.response?.status) {
+      return res
+        .status(err.response.status)
+        .json({ error: err.response.data?.error || "Gemini API error" });
+    }
+
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+module.exports = handlePrompt;

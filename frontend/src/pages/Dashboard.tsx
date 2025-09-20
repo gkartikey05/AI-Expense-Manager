@@ -1,4 +1,5 @@
 import { getData } from "@/api/userApi";
+import FundlyChat from "@/components/FundlyChat";
 import Sidebar from "@/components/Sidebar";
 import { useDashboardToggle } from "@/contexts/DashboardToggleContext";
 import { useDataStore } from "@/store/userDataStore";
@@ -11,7 +12,7 @@ const Dashboard = () => {
   const { isSidebarOpen } = useDashboardToggle();
   const setData = useDataStore((state) => state.setData);
 
-  const { data, isError, error} = useQuery({
+  const { data, isError, error } = useQuery({
     queryKey: ["financialData"],
     queryFn: getData,
   });
@@ -20,14 +21,13 @@ const Dashboard = () => {
     if (data) {
       setData(data);
     }
-  }, [data,setData]);
+  }, [data, setData]);
 
   useEffect(() => {
     if (isError) {
       toast.error(error.message);
     }
   }, [isError, error]);
-
 
   return (
     <section className="relative flex items-start h-screen">
@@ -44,6 +44,8 @@ const Dashboard = () => {
       <main className="flex-1 h-full overflow-y-scroll hide-scrollbar">
         <Outlet />
       </main>
+
+      <FundlyChat />
     </section>
   );
 };
