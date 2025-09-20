@@ -14,7 +14,15 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Eye, EyeOff, Loader, Shield, CheckCircle, Users, Sparkles } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Loader,
+  Shield,
+  CheckCircle,
+  Users,
+  Sparkles,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "@/api/userAuth";
@@ -30,6 +38,9 @@ const signupSchema = z.object({
 });
 
 type FormData = z.infer<typeof signupSchema>;
+
+const inputStyling =
+  "h-12 rounded-xl border-purple-200  focus-visible:ring-1 focus-visible:ring-purple-400 bg-white/50 backdrop-blur-sm";
 
 const SignupPage = () => {
   const [togglePassword, setTogglePassword] = useState(false);
@@ -66,7 +77,7 @@ const SignupPage = () => {
   const benefits = [
     { icon: Shield, text: "Bank-level security" },
     { icon: CheckCircle, text: "Free 30-day trial" },
-    { icon: Users, text: "Join 12,000+ users" }
+    { icon: Users, text: "Join 12,000+ users" },
   ];
 
   return (
@@ -77,7 +88,7 @@ const SignupPage = () => {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:32px_32px]" />
       <div className="absolute top-0 left-1/4 w-px h-32 bg-gradient-to-b from-purple-500/20 to-transparent" />
       <div className="absolute bottom-0 right-1/3 w-px h-24 bg-gradient-to-t from-purple-500/20 to-transparent" />
-      
+
       {/* Floating Elements */}
       <motion.div
         className="absolute top-32 left-20 w-16 h-16 bg-purple-200/30 rounded-full blur-xl"
@@ -107,7 +118,6 @@ const SignupPage = () => {
 
       <main className="container min-h-screen flex items-center justify-center py-8 relative z-10">
         <div className="w-full max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-          
           {/* Left Side - Illustration & Benefits */}
           <motion.div
             className="hidden lg:block text-center lg:text-left"
@@ -122,21 +132,24 @@ const SignupPage = () => {
                 transition={{ duration: 0.2 }}
               >
                 <Sparkles className="w-4 h-4 text-purple-600" />
-                <span className="text-sm font-semibold text-purple-700">Start Your Journey</span>
+                <span className="text-sm font-semibold text-purple-700">
+                  Start Your Journey
+                </span>
               </motion.div>
-              
+
               <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                 Join the{" "}
                 <span className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
                   financial revolution
                 </span>
               </h1>
-              
+
               <p className="text-xl text-gray-600 leading-relaxed mb-8">
-                Take control of your money with intelligent budgeting, smart expense tracking, 
-                and AI-powered insights designed for your success.
+                Take control of your money with intelligent budgeting, smart
+                expense tracking, and AI-powered insights designed for your
+                success.
               </p>
-              
+
               {/* Benefits */}
               <div className="space-y-4">
                 {benefits.map((benefit, index) => (
@@ -150,12 +163,14 @@ const SignupPage = () => {
                     <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                       <benefit.icon className="w-5 h-5 text-purple-600" />
                     </div>
-                    <span className="text-gray-700 font-medium">{benefit.text}</span>
+                    <span className="text-gray-700 font-medium">
+                      {benefit.text}
+                    </span>
                   </motion.div>
                 ))}
               </div>
             </div>
-            
+
             {/* Illustration */}
             <motion.div
               className="relative"
@@ -164,27 +179,38 @@ const SignupPage = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
             >
               <img
-                src="https://undraw.co/api/illustrations/mobile_login_ikmv.svg"
+                src="signup.svg"
                 alt="Join Fundly"
                 className="w-full max-w-lg mx-auto"
               />
-              
+
               {/* Floating Stats */}
               <motion.div
                 className="absolute -top-4 -right-4 bg-white rounded-xl p-3 shadow-lg border border-gray-100"
                 animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
                 <div className="text-sm font-semibold text-gray-900">12K+</div>
                 <div className="text-xs text-gray-600">Happy Users</div>
               </motion.div>
-              
+
               <motion.div
                 className="absolute -bottom-6 -left-6 bg-white rounded-xl p-3 shadow-lg border border-gray-100"
                 animate={{ y: [0, 12, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 1.5,
+                }}
               >
-                <div className="text-sm font-semibold text-purple-600">$5M+</div>
+                <div className="text-sm font-semibold text-purple-600">
+                  $5M+
+                </div>
                 <div className="text-xs text-gray-600">Managed</div>
               </motion.div>
             </motion.div>
@@ -209,24 +235,27 @@ const SignupPage = () => {
               <CardContent className="px-8">
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   {/* Full Name */}
-                  <motion.div 
+                  <motion.div
                     className="space-y-2"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.3 }}
                   >
-                    <Label htmlFor="fullName" className="text-gray-700 font-medium">
+                    <Label
+                      htmlFor="fullName"
+                      className="text-gray-700 font-medium"
+                    >
                       Full Name
                     </Label>
                     <Input
                       id="fullName"
                       type="text"
                       placeholder="John Doe"
-                      className="h-12 rounded-xl border-gray-200 focus:border-purple-400 focus:ring-purple-400/20 bg-white/50 backdrop-blur-sm"
+                      className={inputStyling}
                       {...register("fullName")}
                     />
                     {errors.fullName && (
-                      <motion.p 
+                      <motion.p
                         className="text-sm text-red-500"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -238,24 +267,27 @@ const SignupPage = () => {
                   </motion.div>
 
                   {/* Email */}
-                  <motion.div 
+                  <motion.div
                     className="space-y-2"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.4 }}
                   >
-                    <Label htmlFor="email" className="text-gray-700 font-medium">
+                    <Label
+                      htmlFor="email"
+                      className="text-gray-700 font-medium"
+                    >
                       Email Address
                     </Label>
                     <Input
                       id="email"
                       type="email"
                       placeholder="john50@gmail.com"
-                      className="h-12 rounded-xl border-gray-200 focus:border-purple-400 focus:ring-purple-400/20 bg-white/50 backdrop-blur-sm"
+                      className={inputStyling}
                       {...register("email")}
                     />
                     {errors.email && (
-                      <motion.p 
+                      <motion.p
                         className="text-sm text-red-500"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -267,13 +299,16 @@ const SignupPage = () => {
                   </motion.div>
 
                   {/* Password */}
-                  <motion.div 
+                  <motion.div
                     className="space-y-2"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.5 }}
                   >
-                    <Label htmlFor="password" className="text-gray-700 font-medium">
+                    <Label
+                      htmlFor="password"
+                      className="text-gray-700 font-medium"
+                    >
                       Password
                     </Label>
                     <div className="relative">
@@ -281,10 +316,10 @@ const SignupPage = () => {
                         id="password"
                         type={togglePassword ? "text" : "password"}
                         placeholder="Create a strong password"
-                        className="h-12 rounded-xl border-gray-200 focus:border-purple-400 focus:ring-purple-400/20 bg-white/50 backdrop-blur-sm pr-12"
+                        className={inputStyling}
                         {...register("password")}
                       />
-                      <motion.span 
+                      <motion.span
                         className="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer"
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
@@ -298,7 +333,7 @@ const SignupPage = () => {
                       </motion.span>
                     </div>
                     {errors.password && (
-                      <motion.p 
+                      <motion.p
                         className="text-sm text-red-500"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -318,7 +353,7 @@ const SignupPage = () => {
                     <Button
                       type="submit"
                       disabled={mutation.isPending}
-                      className="w-full h-12 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-xl transition-all duration-200 disabled:opacity-70"
+                      className="w-full h-12 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-xl transition-all duration-200 disabled:opacity-70 cursor-pointer"
                     >
                       {mutation.isPending ? (
                         <div className="flex items-center gap-2">
@@ -334,7 +369,7 @@ const SignupPage = () => {
               </CardContent>
 
               <CardFooter className="text-center pb-8">
-                <motion.p 
+                <motion.p
                   className="text-gray-600"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}

@@ -38,6 +38,9 @@ const loginSchema = z.object({
 
 type FormData = z.infer<typeof loginSchema>;
 
+const inputStyling =
+  "h-12 rounded-xl border-purple-200  focus-visible:ring-1 focus-visible:ring-purple-400 bg-white/50 backdrop-blur-sm";
+
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const setUser = useUserStore((state) => state.setUser);
@@ -174,9 +177,9 @@ const LoginPage = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
             >
               <img
-                src="https://undraw.co/api/illustrations/secure_login_pdn4.svg"
+                src="login.svg"
                 alt="Secure Login"
-                className="w-full max-w-lg mx-auto"
+                className="w-full max-w-md mx-auto"
               />
 
               {/* Floating Achievement Cards */}
@@ -262,7 +265,7 @@ const LoginPage = () => {
                       id="email"
                       type="email"
                       placeholder="you@example.com"
-                      className="h-12 rounded-xl border-gray-200 focus:border-purple-400 focus:ring-purple-400/20 bg-white/50 backdrop-blur-sm"
+                      className={inputStyling}
                       {...register("email")}
                     />
                     {errors.email && (
@@ -303,7 +306,7 @@ const LoginPage = () => {
                         id="password"
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter your password"
-                        className="h-12 rounded-xl border-gray-200 focus:border-purple-400 focus:ring-purple-400/20 bg-white/50 backdrop-blur-sm pr-12"
+                        className={inputStyling}
                         {...register("password")}
                       />
                       <motion.span
@@ -340,10 +343,11 @@ const LoginPage = () => {
                     <Button
                       type="submit"
                       disabled={mutation.isPending}
-                      className="w-full h-12 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-xl transition-all duration-200 disabled:opacity-70"
+                      className="w-full h-12 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-xl transition-all duration-200 disabled:opacity-70 cursor-pointer"
                     >
                       {mutation.isPending ? (
                         <div className="flex items-center gap-2">
+                          x
                           <Loader className="w-4 h-4 animate-spin" />
                           <span>Signing in...</span>
                         </div>

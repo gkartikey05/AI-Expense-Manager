@@ -73,7 +73,7 @@ const Navbar = ({ isAuth = false }: { isAuth: boolean }) => {
             y: isMobileMenuOpen ? 0 : -10,
           }}
           transition={{ duration: 0.2 }}
-          className={`absolute top-full left-0 right-0 bg-purple-900/95 backdrop-blur-lg border-t border-purple-400/30 md:hidden ${
+          className={`absolute top-full left-0 right-0 bg-purple-900/20 backdrop-blur-lg border-t border-purple-400/30 md:hidden ${
             isMobileMenuOpen ? "block" : "hidden"
           }`}
         >
@@ -95,8 +95,8 @@ const Navbar = ({ isAuth = false }: { isAuth: boolean }) => {
                     navigate("/login");
                     setIsMobileMenuOpen(false);
                   }}
-                  variant="outline"
-                  className="w-full border-purple-400 text-white hover:bg-purple-600 py-3 rounded-full font-semibold"
+
+                  className="w-full bg-purple-600 hover:bg-purple-600  text-white  py-3 rounded-full font-semibold"
                 >
                   Login
                 </Button>
@@ -106,7 +106,7 @@ const Navbar = ({ isAuth = false }: { isAuth: boolean }) => {
                     navigate("/signup");
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-full font-semibold"
+                  className="w-full bg-purple-600  hover:bg-purple-600 text-white py-3 rounded-full font-semibold"
                 >
                   Sign Up
                 </Button>
