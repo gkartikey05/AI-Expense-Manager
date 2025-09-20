@@ -1,4 +1,5 @@
 import { getAiAnalysis } from "@/api/aiApi";
+import DashboardHeader from "@/components/DashboardHeader";
 import { useQuery } from "@tanstack/react-query";
 import {
   MessageCircle,
@@ -26,10 +27,15 @@ const InsightPage = () => {
 
   return (
     <>
+      <DashboardHeader title="AI analysis" />
+
       <section className="px-4 md:px-6 lg:px-10 py-5 space-y-5">
         {/* AI Analysis Section */}
         <h1 className="text-2xl font-normal">
-          AI Analysis <span className="text-sm text-gray-500 flex item-center gap-2">(Experimental <FlaskConical className="size-4"/>)</span>
+          AI Analysis{" "}
+          <span className="text-sm text-gray-500 flex item-center gap-2">
+            (Experimental <FlaskConical className="size-4" />)
+          </span>
         </h1>
         <p className="text-gray-500">
           Get AI-based analysis of your financial information.

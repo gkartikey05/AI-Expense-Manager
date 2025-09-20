@@ -1,3 +1,4 @@
+import DashboardHeader from "@/components/DashboardHeader";
 import HelpSupportSection from "@/components/settings/Help&Support";
 import Preferences from "@/components/settings/Preferences";
 import Profile from "@/components/settings/Profile";
@@ -7,7 +8,7 @@ import { HelpCircle, Settings, User } from "lucide-react";
 const SettingPage = () => {
   return (
     <>
-
+      <DashboardHeader title="Settings" />
       <section className="px-4 md:px-6 lg:px-10 py-5 space-y-5">
         <h1 className="text-2xl">Settings</h1>
         <p className="text-gray-500">
