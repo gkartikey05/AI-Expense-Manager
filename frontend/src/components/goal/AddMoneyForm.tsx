@@ -17,6 +17,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addMoneyTogoal } from "@/api/goalApi";
 import toast from "react-hot-toast";
 
+const inputStyling = "h-12 rounded-xl border-purple-200 focus-visible:ring-1 focus-visible:ring-purple-400 bg-white/50 backdrop-blur-sm";
+
 // zod schema
 const formSchema = z.object({
   amount: z
@@ -93,7 +95,7 @@ const AddMoneyForm = ({
             {/*Target Amount */}
             <div className="space-y-2">
               <Label>Add Amount</Label>
-              <Input {...register("amount")} placeholder="0.00" />
+              <Input {...register("amount")} placeholder="0.00" className={inputStyling} />
               {errors.amount && (
                 <p className="text-sm text-red-500 mt-1">
                   {errors.amount.message}

@@ -43,27 +43,34 @@ const IncomeExpenceGraph = () => {
 
         <CardContent className=" flex items-center justify-center">
           {/* graph here  */}
-          <PieChart width={400} height={400}>
-            <Pie
-              data={data?.incomeBreakdown}
-              cx="50%"
-              cy="50%"
-              innerRadius={60} // 👈 makes it a donut
-              outerRadius={100}
-              fill="#8884d8"
-              paddingAngle={5}
-              dataKey="value"
-              label
-            >
-              {data?.incomeBreakdown.map((_:any, index: any) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
+          {data?.incomeBreakdown && data.incomeBreakdown.length > 0 ? (
+            <PieChart width={400} height={400}>
+              <Pie
+                data={data?.incomeBreakdown}
+                cx="50%"
+                cy="50%"
+                innerRadius={60} 
+                outerRadius={100}
+                fill="#8884d8"
+                paddingAngle={5}
+                dataKey="value"
+                label
+              >
+                {data?.incomeBreakdown.map((_:any, index: any) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+              <p className="text-lg font-medium">No Income Data</p>
+              <p className="text-sm">You don't have any income transactions yet</p>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -78,27 +85,34 @@ const IncomeExpenceGraph = () => {
 
         <CardContent className="flex items-center justify-center">
           {/* graph here  */}
-          <PieChart width={400} height={400}>
-            <Pie
-              data={data?.expenseBreakdown}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={100}
-              fill="#8884d8"
-              paddingAngle={5}
-              dataKey="value"
-              label
-            >
-              {data?.expenseBreakdown.map((_: any, index: any) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
+          {data?.expenseBreakdown && data.expenseBreakdown.length > 0 ? (
+            <PieChart width={400} height={400}>
+              <Pie
+                data={data?.expenseBreakdown}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={100}
+                fill="#8884d8"
+                paddingAngle={5}
+                dataKey="value"
+                label
+              >
+                {data?.expenseBreakdown.map((_: any, index: any) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+              <p className="text-lg font-medium">No Expense Data</p>
+              <p className="text-sm">You don't have any expense transactions yet</p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

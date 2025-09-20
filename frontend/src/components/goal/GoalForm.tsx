@@ -25,6 +25,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addGoal } from "@/api/goalApi";
 import toast from "react-hot-toast";
 
+const inputStyling = "h-12 rounded-xl border-purple-200 focus-visible:ring-1 focus-visible:ring-purple-400 bg-white/50 backdrop-blur-sm";
+
 // zod schema
 const formSchema = z.object({
   goalName: z.string().min(1, "Goal name is required"),
@@ -116,6 +118,7 @@ const GoalForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
               <Input
                 {...register("goalName")}
                 placeholder="e.g. New Car , Vacation"
+                className={inputStyling}
               />
               {errors.goalName && (
                 <p className="text-sm text-red-500 mt-1">
@@ -127,7 +130,7 @@ const GoalForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
             {/*Target Amount */}
             <div className="space-y-2">
               <Label>Target Amount</Label>
-              <Input {...register("targetAmount")} placeholder="0.00" />
+              <Input {...register("targetAmount")} placeholder="0.00" className={inputStyling} />
               {errors.targetAmount && (
                 <p className="text-sm text-red-500 mt-1">
                   {errors.targetAmount.message}
@@ -138,7 +141,7 @@ const GoalForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
             {/*Saved Amount */}
             <div className="space-y-2">
               <Label>Current Amount Saved</Label>
-              <Input {...register("savedAmount")} placeholder="0.00" />
+              <Input {...register("savedAmount")} placeholder="0.00" className={inputStyling} />
               {errors.savedAmount && (
                 <p className="text-sm text-red-500 mt-1">
                   {errors.savedAmount.message}
@@ -154,7 +157,7 @@ const GoalForm = ({ closeForm }: { closeForm: (value: boolean) => void }) => {
                   <Button
                     variant={"outline"}
                     className={cn(
-                      "w-full justify-start text-left font-normal",
+                      `w-full justify-start text-left font-normal ${inputStyling}`,
                       !selectedDate && "text-muted-foreground"
                     )}
                   >

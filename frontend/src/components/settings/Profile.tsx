@@ -20,6 +20,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+const inputStyling = "h-12 rounded-xl border-purple-200 focus-visible:ring-1 focus-visible:ring-purple-400 bg-white/50 backdrop-blur-sm";
+
 // zod
 const profileSchema = z.object({
   fullName: z.string().optional(),
@@ -105,6 +107,7 @@ const Profile = () => {
                   type="text"
                   placeholder="Write your name"
                   {...register("fullName")}
+                  className={inputStyling}
                 />
               </div>
             ) : (
@@ -132,6 +135,7 @@ const Profile = () => {
                   type="tel"
                   placeholder="Phone number"
                   {...register("phoneNumber")}
+                  className={inputStyling}
                 />
               </div>
             ) : (

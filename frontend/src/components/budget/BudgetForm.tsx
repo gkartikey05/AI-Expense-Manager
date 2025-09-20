@@ -25,6 +25,8 @@ import { addBudget, updateBudget } from "@/api/budgetApi";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 
+const inputStyling = "h-12 rounded-xl border-purple-200 focus-visible:ring-1 focus-visible:ring-purple-400 bg-white/50 backdrop-blur-sm";
+
 const categories = [
   "Food",
   "Housing",
@@ -140,7 +142,7 @@ const BudgetForm = ({
             {/* Amount */}
             <div className="space-y-2">
               <Label>Monthly Budget Amount</Label>
-              <Input {...register("amount")} placeholder="0.00" />
+              <Input {...register("amount")} placeholder="0.00" className={inputStyling} />
               {errors.amount && (
                 <p className="text-sm text-red-500 mt-1">
                   {errors.amount.message}
@@ -152,7 +154,7 @@ const BudgetForm = ({
             <div className="space-y-2">
               <Label>Category</Label>
               <Select onValueChange={(val) => setValue("category", val)}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className={`w-full ${inputStyling}`}>
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>

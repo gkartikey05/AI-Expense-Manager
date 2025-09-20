@@ -33,6 +33,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { makeTransaction, updateTransaction } from "@/api/transactionApi";
 
+const inputStyling = "h-12 rounded-xl border-purple-200 focus-visible:ring-1 focus-visible:ring-purple-400 bg-white/50 backdrop-blur-sm";
+
 const TransactionTypes = [
   { id: 1, title: "income" },
   { id: 2, title: "expense" },
@@ -228,6 +230,7 @@ const TransactionForm = ({
               <Input
                 {...register("description")}
                 placeholder="e.g. Grocery shopping"
+                className={inputStyling}
               />
               {errors.description && (
                 <p className="text-sm text-red-500 mt-1">
@@ -239,7 +242,7 @@ const TransactionForm = ({
             {/* Amount */}
             <div className="space-y-2">
               <Label>Amount</Label>
-              <Input {...register("amount")} placeholder="0.00" />
+              <Input {...register("amount")} placeholder="0.00" className={inputStyling} />
               {errors.amount && (
                 <p className="text-sm text-red-500 mt-1">
                   {errors.amount.message}
@@ -255,7 +258,7 @@ const TransactionForm = ({
                   <Button
                     variant={"outline"}
                     className={cn(
-                      "w-full justify-start text-left font-normal",
+                      `w-full justify-start text-left font-normal ${inputStyling}`,
                       !selectedDate && "text-muted-foreground"
                     )}
                   >
@@ -287,7 +290,7 @@ const TransactionForm = ({
             <div className="space-y-2">
               <Label>Category</Label>
               <Select onValueChange={(val) => setValue("category", val)}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className={`w-full ${inputStyling}`}>
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>

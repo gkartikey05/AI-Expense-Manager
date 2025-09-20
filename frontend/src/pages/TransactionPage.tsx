@@ -1,5 +1,4 @@
 import { deleteTransaction, getTransaction } from "@/api/transactionApi";
-import DashboardHeader from "@/components/DashboardHeader";
 import TransactionForm from "@/components/transaction/TransactionForm";
 import { Button } from "@/components/ui/button";
 import {
@@ -44,6 +43,10 @@ import {
 import { Loader, Plus, Search, SquarePen, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+
+
+const inputStyling =
+  "h-12 rounded-xl border-purple-200  focus-visible:ring-1 focus-visible:ring-purple-400 bg-white/50 backdrop-blur-sm";
 
 const TransactionPage = () => {
   const [openTransactionForm, setOpenTransactionForm] = useState(false);
@@ -93,7 +96,7 @@ const TransactionPage = () => {
 
   return (
     <>
-      <DashboardHeader title="Transaction" />
+  
       <section className="px-4 md:px-6 lg:px-10 py-5 space-y-5">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl">Transactions</h1>
@@ -116,7 +119,7 @@ const TransactionPage = () => {
               <Input
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search transactions by description"
-                className="pl-10 shadow-none w-full"
+                className={inputStyling}
               />
             </div>
 
@@ -331,11 +334,15 @@ const TransactionPage = () => {
             <CardHeader>
               <CardTitle className="text-xl font-normal">Net Flow</CardTitle>
             </CardHeader>
-            <CardContent className="text-3xl font-semibold text-green-500">
-              +{currency}
+            <CardContent className={`text-3xl font-semibold ${
+              financeData && (financeData.totalIncome - financeData.totalExpense) >= 0 
+                ? 'text-green-500' 
+                : 'text-red-500'
+            }`}>
+              {financeData && (financeData.totalIncome - financeData.totalExpense) >= 0 ? '+' : '-'}{currency}
               {financeData &&
                 formatNumber(
-                  (financeData.totalIncome - financeData.totalExpense).toFixed(
+                  Math.abs(financeData.totalIncome - financeData.totalExpense).toFixed(
                     2
                   )
                 )}

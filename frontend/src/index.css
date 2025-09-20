@@ -114,7 +114,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    font-family: "Outfit", sans-serif;
+    font-family: "Poppins", sans-serif;
   }
   body {
     @apply bg-background text-foreground;
