@@ -79,7 +79,7 @@ const LoginPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100/50 relative overflow-hidden pt-10">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100/50 relative overflow-hidden pt-15">
       <Navbar isAuth={true} />
 
       {/* Background Elements */}
@@ -179,25 +179,32 @@ const LoginPage = () => {
               <img
                 src="login.svg"
                 alt="Secure Login"
-                className="w-full max-w-md mx-auto"
+                className="w-full max-w-xs mx-auto" 
               />
 
               {/* Floating Achievement Cards */}
               <motion.div
-                className="absolute -top-6 -left-4 bg-white rounded-xl p-3 shadow-lg border border-gray-100"
-                animate={{ y: [0, -8, 0] }}
+                className="absolute -top-4 -left-3 bg-white rounded-lg p-2 shadow-lg border border-gray-100" 
+                animate={{ y: [0, -6, 0] }} 
                 transition={{
                   duration: 3,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
               >
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                    <TrendingUp className="w-4 h-4 text-green-600" />
+                <div className="flex items-center gap-1.5">
+                  {" "}
+                  {/* Reduced gap */}
+                  <div className="w-6 h-6 bg-green-100 rounded-md flex items-center justify-center">
+                    {" "}
+                    {/* Smaller icon container */}
+                    <TrendingUp className="w-3 h-3 text-green-600" />{" "}
+                    {/* Smaller icon */}
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-gray-900">
+                    <div className="text-xs font-semibold text-gray-900">
+                      {" "}
+                      {/* Smaller text */}
                       +15%
                     </div>
                     <div className="text-xs text-gray-600">This month</div>
@@ -206,8 +213,8 @@ const LoginPage = () => {
               </motion.div>
 
               <motion.div
-                className="absolute -bottom-4 -right-6 bg-white rounded-xl p-3 shadow-lg border border-gray-100"
-                animate={{ y: [0, 12, 0] }}
+                className="absolute -bottom-3 -right-4 bg-white rounded-lg p-2 shadow-lg border border-gray-100" 
+                animate={{ y: [0, 8, 0] }} 
                 transition={{
                   duration: 4,
                   repeat: Infinity,
@@ -215,12 +222,19 @@ const LoginPage = () => {
                   delay: 1.5,
                 }}
               >
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <Shield className="w-4 h-4 text-purple-600" />
+                <div className="flex items-center gap-1.5">
+                  {" "}
+                  {/* Reduced gap */}
+                  <div className="w-6 h-6 bg-purple-100 rounded-md flex items-center justify-center">
+                    {" "}
+                    {/* Smaller icon container */}
+                    <Shield className="w-3 h-3 text-purple-600" />{" "}
+                    {/* Smaller icon */}
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-gray-900">
+                    <div className="text-xs font-semibold text-gray-900">
+                      {" "}
+                      {/* Smaller text */}
                       Secure
                     </div>
                     <div className="text-xs text-gray-600">Protected</div>

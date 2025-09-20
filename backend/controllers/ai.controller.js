@@ -56,16 +56,10 @@ const getAiAnalytics = async (req, res) => {
   }
 };
 
-module.exports = getAiAnalytics;
-
-
-
 
 const handlePrompt = async (req, res) => {
   try {
     const { message } = req.body;
-
-    console.log("message:", message)
 
     if (!message || message.trim() === "") {
       return res.status(400).json({ error: "Message is required" });
@@ -110,4 +104,8 @@ const handlePrompt = async (req, res) => {
   }
 };
 
-module.exports = handlePrompt;
+
+module.exports = {
+  getAiAnalytics,
+  handlePrompt
+};

@@ -1,7 +1,7 @@
 const express = require("express");
-const getAiAnalytics = require("../controllers/ai.controller");
+const { getAiAnalytics, handlePrompt } = require("../controllers/ai.controller");
 const auth = require("../middleware/auth");
-const handlePrompt = require("../controllers/ai.controller");
+
 
 const aiRouter = express.Router();
 

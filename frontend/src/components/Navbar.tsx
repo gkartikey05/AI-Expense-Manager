@@ -28,7 +28,7 @@ const Navbar = ({ isAuth = false }: { isAuth: boolean }) => {
               onClick={() => navigate("/")}
               className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-full font-semibold transition-colors duration-200 cursor-pointer"
             >
-              Go to Dashboard
+              Go to home
             </Button>
           ) : (
             <>
@@ -86,7 +86,7 @@ const Navbar = ({ isAuth = false }: { isAuth: boolean }) => {
                 }}
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-full font-semibold"
               >
-                Go to Dashboard
+                Go to home
               </Button>
             ) : (
               <>

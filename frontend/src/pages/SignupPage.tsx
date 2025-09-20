@@ -81,7 +81,7 @@ const SignupPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100/50 relative overflow-hidden pt-10">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100/50 relative overflow-hidden pt-15">
       <Navbar isAuth={true} />
 
       {/* Background Elements */}

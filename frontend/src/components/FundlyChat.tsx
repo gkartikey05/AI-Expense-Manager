@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, KeyboardEvent, ChangeEvent } from "react";
-import { X, Send} from "lucide-react";
+import { X, Send } from "lucide-react";
 import axiosInstance from "@/api/axiosInstance";
 import FloatingChatButton from "./FloatingChatButton";
 
@@ -113,34 +113,49 @@ export default function FundlyChat() {
     <>
       {/* Chat Window */}
       <div
-        className={`fixed inset-x-0 bottom-0 z-50 transition-all duration-300 flex justify-end ${
+        className={`fixed bottom-0 right-0 z-50 transition-all duration-300 ${
           open ? "pointer-events-auto" : "pointer-events-none"
         }`}
-        style={{ paddingBottom: "env(safe-area-inset-bottom, 16px)" }}
+        style={{
+          paddingBottom: "env(safe-area-inset-bottom, 16px)",
+          paddingRight: "16px",
+        }}
       >
         <div
-          className={`w-[92vw] max-w-[380px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl transform transition-all duration-300 flex flex-col ${
-            open
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6 scale-95"
-          }`}
+          className={`
+            w-[calc(100vw-2rem)] sm:w-[400px] md:w-[420px] lg:w-[440px]
+            h-[calc(100vh-8rem)] sm:h-[600px] md:h-[650px] lg:h-[700px]
+            max-h-[calc(100vh-6rem)]
+            bg-white dark:bg-gray-900 
+            rounded-t-2xl sm:rounded-2xl 
+            shadow-2xl 
+            transform transition-all duration-300 
+            flex flex-col
+            ${
+              open
+                ? "opacity-100 translate-y-0 scale-100"
+                : "opacity-0 translate-y-6 scale-95"
+            }
+          `}
           style={{ boxShadow: "0 20px 40px rgba(96, 24, 255, 0.12)" }}
           aria-hidden={!open}
         >
-          {/* Header */}
+          {/* Header - Fixed height */}
           <div
-            className="flex items-center justify-between px-4 py-3 border-b dark:border-gray-800 rounded-t-2xl"
+            className="flex items-center justify-between px-4 py-3 border-b dark:border-gray-800 rounded-t-2xl flex-shrink-0"
             style={{ background: "linear-gradient(90deg,#6d28d9, #7c3aed)" }}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 min-w-0">
               <img
                 src={ROBOT_IMG_URL}
                 alt="fundly"
-                className="w-10 h-10 rounded-full ring-2 ring-white"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full ring-2 ring-white flex-shrink-0"
               />
-              <div>
-                <div className="text-white font-semibold">Fundly</div>
-                <div className="text-sm text-purple-100">
+              <div className="min-w-0">
+                <div className="text-white font-semibold text-sm sm:text-base truncate">
+                  Fundly
+                </div>
+                <div className="text-xs sm:text-sm text-purple-100 truncate">
                   Your friendly finance buddy
                 </div>
               </div>
@@ -148,17 +163,20 @@ export default function FundlyChat() {
             <button
               onClick={() => setOpen(false)}
               aria-label="Close chat"
-              className="p-2 rounded-lg hover:bg-white/10 transition"
+              className="p-2 rounded-lg hover:bg-white/10 transition flex-shrink-0"
             >
               <X className="w-4 h-4 text-white" />
             </button>
           </div>
 
-          {/* Messages */}
+          {/* Messages - Flexible height with proper constraints */}
           <div
             ref={containerRef}
-            className="flex-1 overflow-y-auto px-4 py-4 space-y-3 hide-scrollbar"
-            style={{ maxHeight: "80vh" }}
+            className="flex-1 overflow-y-auto px-3 sm:px-4 py-3 sm:py-4 space-y-3 min-h-0"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "#cbd5e1 transparent",
+            }}
           >
             {messages.map((m, i) => (
               <div
@@ -168,47 +186,72 @@ export default function FundlyChat() {
                 }`}
               >
                 <div
-                  className={`max-w-[78%] break-words px-4 py-2 rounded-xl ${
-                    m.role === "user"
-                      ? "bg-purple-600 text-white rounded-br-2xl rounded-tl-xl"
-                      : "bg-gray-100 text-gray-900 rounded-bl-2xl rounded-tr-xl"
-                  }`}
+                  className={`
+                    max-w-[85%] sm:max-w-[78%] 
+                    break-words px-3 sm:px-4 py-2 
+                    rounded-xl text-sm
+                    ${
+                      m.role === "user"
+                        ? "bg-purple-600 text-white rounded-br-2xl rounded-tl-xl"
+                        : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-2xl rounded-tr-xl"
+                    }
+                  `}
                 >
-                  <div className="text-sm whitespace-pre-wrap">{m.content}</div>
+                  <div className="whitespace-pre-wrap">{m.content}</div>
                 </div>
               </div>
             ))}
 
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-gray-100 text-gray-900 px-3 py-2 rounded-xl rounded-tr-xl animate-pulse">
+                <div className="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-xl rounded-tr-xl animate-pulse">
                   <TypingDots />
                 </div>
               </div>
             )}
 
             {error && (
-              <div className="text-xs text-red-600 text-center mt-2">
+              <div className="text-xs text-red-600 text-center mt-2 px-2">
                 {error}
               </div>
             )}
           </div>
 
-          {/* Input area */}
-          <div className="px-3 py-3 border-t dark:border-gray-800 rounded-b-2xl bg-white dark:bg-gray-900">
-            <div className="flex gap-2 items-center">
+          {/* Input area - Fixed height */}
+          <div className="px-3 sm:px-4 py-3 border-t dark:border-gray-800 rounded-b-2xl bg-white dark:bg-gray-900 flex-shrink-0">
+            <div className="flex gap-2 items-end">
               <textarea
                 ref={inputRef}
                 value={input}
                 onChange={onChange}
                 onKeyDown={onKeyDown}
                 placeholder="Ask me about budgeting, saving, or investing..."
-                className="flex-1 resize-none min-h-[42px] max-h-28 rounded-xl px-3 py-2 text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                className="
+                  flex-1 resize-none 
+                  min-h-[40px] max-h-20 sm:max-h-24
+                  rounded-xl px-3 py-2 
+                  text-sm 
+                  border border-gray-200 dark:border-gray-700
+                  bg-white dark:bg-gray-800
+                  text-gray-900 dark:text-gray-100
+                  placeholder-gray-500 dark:placeholder-gray-400
+                  focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent
+                  transition-all duration-200
+                "
+                rows={1}
               />
               <button
                 onClick={sendMessage}
-                disabled={loading}
-                className="bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-full disabled:opacity-60 transition"
+                disabled={loading || !input.trim()}
+                className="
+                  bg-purple-600 hover:bg-purple-700 
+                  text-white p-2 sm:p-2.5
+                  rounded-full 
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                  transition-all duration-200
+                  flex-shrink-0
+                  focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2
+                "
                 aria-label="Send"
               >
                 {!loading ? <Send className="w-4 h-4" /> : <LoaderSmall />}
@@ -233,15 +276,15 @@ function TypingDots() {
   return (
     <div className="flex items-center gap-1">
       <span
-        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+        className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce"
         style={{ animationDelay: "0s" }}
       />
       <span
-        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+        className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce"
         style={{ animationDelay: "0.12s" }}
       />
       <span
-        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+        className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce"
         style={{ animationDelay: "0.24s" }}
       />
       <style>{`
@@ -265,13 +308,13 @@ function LoaderSmall() {
         cx="12"
         cy="12"
         r="10"
-        stroke="white"
+        stroke="currentColor"
         strokeWidth="2"
         fill="none"
       />
       <path
         className="opacity-75"
-        fill="white"
+        fill="currentColor"
         d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
       />
     </svg>
