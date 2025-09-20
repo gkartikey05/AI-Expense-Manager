@@ -1,89 +1,140 @@
 import { ReceiptText, Wallet, Target, BarChart3 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const features = [
   {
-    name: "Expense Tracking",
+    name: "Smart Expense Tracking",
     icon: ReceiptText,
     description:
-      "Monitor where your money goes with categorized expense logging and real-time updates.",
+      "Automatically categorize and monitor every transaction with AI-powered insights. Get real-time notifications when you're approaching budget limits and discover spending patterns you never noticed before.",
+    color: "from-blue-500 to-cyan-500",
+    accent: "text-blue-600",
+    illustration: "savings.svg",
   },
   {
-    name: "Budgeting",
+    name: "Intelligent Budgeting",
     icon: Wallet,
     description:
-      "Set monthly or category-based budgets to control overspending and stay financially disciplined.",
+      "Create dynamic budgets that adapt to your lifestyle and income changes. Track your progress with visual indicators, and receive smart suggestions to optimize your spending.",
+    color: "from-green-500 to-emerald-500",
+    accent: "text-green-600",
+    illustration: "inflation.svg",
   },
   {
-    name: "Goal Tracking",
+    name: "Goal Achievement System",
     icon: Target,
     description:
-      "Create and track financial goals like saving for a trip or emergency fund with progress visualization.",
+      "Transform your financial dreams into achievable milestones. Whether you're saving for a vacation, emergency fund, or major purchase, get timelines and progress visualizations that keep you motivated.",
+    color: "from-orange-500 to-red-500",
+    accent: "text-orange-600",
+    illustration: "goal.svg",
   },
   {
-    name: "Reports",
+    name: "Advanced Analytics & Reports",
     icon: BarChart3,
     description:
-      "Gain insights with detailed reports and visual summaries to understand spending habits and trends.",
+      "Unlock the power of your financial data with interactive dashboards. Discover trends, identify savings opportunities, and make decisions with confidence.",
+    color: "from-purple-500 to-pink-500",
+    accent: "text-purple-600",
+    illustration: "metrics.svg",
   },
 ];
 
 export default function Feature() {
   return (
-    <motion.div
-      className="bg-white py-18 sm:py-24"
-      initial={{ opacity: 0, y: 60 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
-    >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base/7 font-semibold text-indigo-600">
-            Manage Better
+    <section className="relative py-20 sm:py-32 overflow-hidden bg-gradient-to-b from-gray-50 to-white">
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:32px_32px]" />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          className="mx-auto max-w-4xl text-center mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full mb-8 shadow-sm">
+            <div className="w-2 h-2 bg-purple-600 rounded-full animate-ping" />
+            <span className="text-sm font-semibold text-purple-700">
+              Powerful Features
+            </span>
+          </div>
+
+          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-8 leading-tight">
+            Financial tools that{" "}
+            <span className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+              actually work
+            </span>
           </h2>
-          <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl lg:text-balance">
-            Everything you need to Manage your Finance
+
+          <p className="text-xl sm:text-2xl text-gray-600 leading-relaxed">
+            Stop juggling spreadsheets. Gain full control with tools designed
+            for real life.
           </p>
-          <p className="mt-6 text-lg/8 text-gray-600">
-            With Fundly, managing your finances becomes effortless.Get a clear
-            view of where your money goes, and make smarter decisions with
-            easy-to-understand reports and budgeting tools, all tailored to help
-            you take control of your financial journey.
-          </p>
-        </div>
-        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
-          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-            {features.map((feature, idx) => (
-              <motion.div
-                key={feature.name}
-                className="relative pl-16"
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{
-                  duration: 0.5,
-                  delay: idx * 0.12,
-                  ease: "easeOut",
-                }}
-              >
-                <dt className="text-base/7 font-semibold text-gray-900">
-                  <div className="absolute top-0 left-0 flex size-10 items-center justify-center rounded-lg bg-indigo-600">
-                    <feature.icon
-                      aria-hidden="true"
-                      className="size-6 text-white"
-                    />
-                  </div>
+        </motion.div>
+
+        {/* Features */}
+        <div className="space-y-24 lg:space-y-32">
+          {features.map((feature, idx) => (
+            <motion.div
+              key={feature.name}
+              className={`flex flex-col ${
+                idx % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+              } items-center gap-12 lg:gap-20`}
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{
+                duration: 0.8,
+                delay: idx * 0.1,
+                ease: "easeOut",
+              }}
+            >
+              {/* Content */}
+              <div className="flex-1 text-center lg:text-left">
+                <motion.div
+                  className={`inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br ${feature.color} rounded-3xl mb-6 shadow-lg backdrop-blur-sm`}
+                  whileHover={{ scale: 1.15, rotate: 8 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <feature.icon className="w-10 h-10 text-white drop-shadow" />
+                </motion.div>
+
+                <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
                   {feature.name}
-                </dt>
-                <dd className="mt-2 text-base/7 text-gray-600">
+                </h3>
+
+                <p className="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                   {feature.description}
-                </dd>
-              </motion.div>
-            ))}
-          </dl>
+                </p>
+
+                <motion.div
+                  className="mt-8 inline-flex items-center gap-2 text-lg font-semibold"
+                  whileHover={{ x: 6 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <span className={feature.accent}>Learn more</span>
+                  <div
+                    className={`w-12 h-px bg-gradient-to-r ${feature.color}`}
+                  />
+                </motion.div>
+              </div>
+
+              {/* Illustration */}
+              <div className="flex-1 relative">
+                <motion.img
+                  src={feature.illustration}
+                  alt={`${feature.name} illustration`}
+                  className="relative mx-auto w-80 h-auto lg:w-96 drop-shadow-md"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
-    </motion.div>
+    </section>
   );
 }

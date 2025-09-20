@@ -1,5 +1,5 @@
 import { assets } from "@/assets/assets";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const BentoGrid = () => {
   return (
